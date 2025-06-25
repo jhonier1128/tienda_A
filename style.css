@@ -1,12 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+/*
 @font-face {
   font-family: 'Perfect Futures';
   src: url(/perfect_futures/Perfect\ Futures\ Italic.otf);
   font-weight: bold;
   font-style: bold;
 }
+*/
 
+:root {
+  --background-grey: #F5F5F5;
+}
 
 *{
     margin: 0;
@@ -21,7 +26,7 @@ body, .btn-pedir{
 }
 .slider, .nav-menu-desktop ul, .categorias-titulo, .info-contacto h2, .oferta-descripcion {
   font-family: "Perfect Futures";
-  
+
 }
 
 
@@ -41,7 +46,7 @@ body, .btn-pedir{
   display: flex;
   width: 300%;
   transition: transform 0.5s ease-in-out;
-  
+
 }
 
 .slide {
@@ -88,15 +93,6 @@ body, .btn-pedir{
 .nav-menu {
   display: none;
 }
-/* Menú hamburguesa por defecto oculto 
-.menu-toggle {
-  display: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: white;
-  background: transparent;
-  border: none;
-}*/
 
 /* Menú horizontal escritorio */
 .nav-menu-desktop ul {
@@ -106,7 +102,7 @@ body, .btn-pedir{
   margin: 0;
   padding: 0;
   transform: translateX(-420px); /* mueve 20px hacia la izquierda */
-  
+
 }
 
 /* Íconos a la derecha */
@@ -192,7 +188,7 @@ body, .btn-pedir{
 /* seccion de categoria*/
 .categorias {
   padding: 40px 20px;
-  background-color: #F5F5F5;
+  background-color: var(--background-grey);
 }
 
 .categorias-titulo {
@@ -248,11 +244,11 @@ body, .btn-pedir{
 /*seccion de ofertas*/
 .oferta {
   padding: 40px 20px;
-  background-color: #F5F5F5;
+  background-color: var(--background-grey);
 }
 
 .oferta-secundaria {
-  background-color: #F5F5F5;
+  background-color: var(--background-grey);
 }
 
 .oferta-container {
@@ -466,7 +462,7 @@ hr {
   .nav-menu ul li a {
     color: white;
     text-decoration: none;
-    
+
   }
 
   .usuario-mobile {
