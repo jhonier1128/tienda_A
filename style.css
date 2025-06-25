@@ -13,6 +13,10 @@
   --background-grey: #F5F5F5;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 *{
     margin: 0;
     padding: 0;
@@ -79,6 +83,9 @@ body, .btn-pedir{
   background-color:  #cc1f1f;
   padding: 10px 0;
   width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .header-container {
