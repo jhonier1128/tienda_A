@@ -582,3 +582,77 @@ hr {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* Estilos para la página de categoría (categoria1.html) */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.product-card img {
+    max-width: 100%;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+.product-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+.product-card .price {
+    font-size: 1.2rem;
+    color: #cc1f1f;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.product-card .details p {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 5px;
+}
+.product-card .btn-add-to-cart {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #cc1f1f;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+    border: 1px solid #000;
+}
+.product-card .btn-add-to-cart:hover {
+    background-color: #a61313;
+}
+.page-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #cc1f1f;
+    margin-top: 20px;
+    font-family: "Perfect Futures", sans-serif; /* Usando la fuente del proyecto */
+}
+.simple-footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #212121;
+    color: white;
+    margin-top: 40px;
+}
+.simple-footer a {
+    color: #FFEB3B;
+    text-decoration: none;
+}
