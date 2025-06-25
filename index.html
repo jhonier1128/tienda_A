@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+     <a href="https://api.whatsapp.com/send?phone=521234567890&text=Hola,%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n"
+    class="whatsapp-float" target="_blank">
+    <img src="img/whatsapp-svgrepo-com.svg" alt="WhatsApp" class="whatsapp-icon">
+    </a>
+
+    <div class="slider-container">
+        <div class="slider" id="slider">
+            <div class="slide">Envió a Nivel Nacional </div>
+            <div class="slide">Envió Contra entrega </div>
+            <div class="slide">¿Qué estás esperando?</div>
+        </div>
+    </div>
+    
+
+    <header class="header" id="inicio">
+        <div class="header-container">
+
+            <!-- Logo a la izquierda en escritorio -->
+            <div class="logo">
+                <img src="img/logo_oficial.png" alt="Logo Empresa" />
+            </div>
+
+            <!-- Menú horizontal solo visible en escritorio -->
+            <nav class="nav-menu-desktop">
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#categoria">Catálogo</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+
+            <!-- Iconos a la derecha (busqueda, usuario, carrito) -->
+            <div class="iconos">
+                <a href="#"><img src="img/icons8-search.svg" alt="Buscar" /></a>
+                <a href="#" class="usuario-desktop"><img src="img/user-icon-svgrepo-com.svg" alt="Usuario" /></a>
+                <a href="#"><img src="img/shopping-cart.svg" alt="Carrito" /></a>
+            </div>
+
+            <!-- Menú hamburguesa visible solo en móvil -->
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+         </div>
+
+        <!-- Menú desplegable solo visible en móvil -->
+        <nav class="nav-menu" id="nav">
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#categoria">Catálogo</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+        <!-- Usuario con texto -->
+        <div class="usuario-mobile">
+            <a href="#"><img src="img/user-icon-svgrepo-com.svg" alt="Usuario" /></a>
+            <span>Iniciar sesión</span>
+        </div>
+        <!-- Redes sociales -->
+        <div class="redes-menu">
+            <a href="https://facebook.com"><img src="img/facebook.svg" alt="Facebook"></a>
+            <a href="https://instagram.com"><img src="img/instagram.svg" alt="Instagram"></a>
+            <a href="https://tiktok.com"><img src="img/tiktok.svg" alt="TikTok"></a>
+        </div>
+        </nav>
+    </header>
+
+    <section class="slider1-section">
+        <div class="slider1">
+            <div class="slider1--inner">
+            <img src="img/IMAGEN DE PORTADA4.jpg" alt=""> 
+            <img src="img/IMAGEN DE PORTADA6.jpg" alt=""> 
+            </div>
+        </div>
+    </section>
+
+      
+
+    <section class="categorias" id="categoria">
+        <h2 class="categorias-titulo">Categorías</h2>
+        <div class="categorias-grid">
+            <!-- Categoría 1 -->
+            <div class="categoria">
+            <img src="img/chaqueta1.jpeg" alt="Categoría 1">
+            <a href="categoria1.html" class="btn-categoria">Ver más</a>
+            </div>
+
+            <!-- Categoría 2 -->
+            <div class="categoria">
+            <img src="img/chaqueta2.jpeg" alt="Categoría 2">
+            <a href="categoria2.html" class="btn-categoria">Ver más</a>
+            </div>
+
+            <!-- Categoría 3 -->
+            <div class="categoria">
+            <img src="img/chaqueta3.jpeg" alt="Categoría 3">
+            <a href="categoria3.html" class="btn-categoria">Ver más</a>
+            </div>
+
+            <!-- Categoría 4 -->
+            <div class="categoria">
+            <img src="img/chaqueta1.jpeg" alt="Categoría 4">
+            <a href="categoria4.html" class="btn-categoria">Ver más</a>
+            </div>
+
+            <!-- Categoría 5 -->
+            <div class="categoria">
+            <img src="img/chaqueta2.jpeg" alt="Categoría 5">
+            <a href="categoria5.html" class="btn-categoria">Ver más</a>
+            </div>
+
+            <!-- Categoría 6 -->
+            <div class="categoria">
+            <img src="img/chaqueta3.jpeg" alt="Categoría 6">
+            <a href="categoria6.html" class="btn-categoria">Ver más</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Oferta Principal -->
+    <section class="oferta">
+        <div class="oferta-container">
+        <div class="oferta-img">
+            <img src="img/oferta1.jpg" alt="Prenda en oferta">
+        </div>
+        <div class="oferta-info">
+            <h5 class="oferta-nombre">Camisa Clásica</h5>
+            <h1 class="oferta-descripcion"><strong>Camisa de algodón premium</strong></h1>
+            <div class="oferta-precios">
+            <span class="precio-anterior">$49.99</span>
+            <span class="precio-nuevo">$29.99</span>
+            <span class="oferta-label">¡OFERTA!</span>
+            </div>
+            <p class="envio-info">Incluye gastos de envío a todo el país.</p>
+            <div class="cantidad">
+            <label for="cantidad1">Cantidad:</label>
+            <input type="number" id="cantidad1" name="cantidad1" value="1" min="1">
+            </div>
+            <p class="compartir">🔗 Compartir</p>
+            <button class="btn-pedir">Pedir ahora</button>
+            <p class="ver-detalles">📄 Ver más detalles de la compra</p>
+        </div>
+        </div>
+    </section>
+
+  <!-- Sección de Oferta Secundaria con fondo diferente -->
+    <section class="oferta oferta-secundaria">
+        <div class="oferta-container">
+        <div class="oferta-img">
+            <img src="img/oferta2.jpg" alt="Otra prenda en oferta">
+        </div>
+        <div class="oferta-info">
+            <h5 class="oferta-nombre">Pantalón Moderno</h5>
+            <h1 class="oferta-descripcion"><strong>Pantalón ajustado con bolsillos</strong></h1>
+            <div class="oferta-precios">
+            <span class="precio-anterior">$59.99</span>
+            <span class="precio-nuevo">$39.99</span>
+            <span class="oferta-label">¡OFERTA!</span>
+            </div>
+            <p class="envio-info">Envío gratis en compras mayores a $30.</p>
+            <div class="cantidad">
+            <label class="cantidad" for="cantidad2">Cantidad:</label>
+            <input type="number" id="cantidad2" name="cantidad2" value="1" min="1">
+            </div>
+            <p class="compartir">🔗 Compartir</p>
+            <button class="btn-pedir">Pedir ahora</button>
+            <p class="ver-detalles">📄 Ver más detalles de la compra</p>
+        </div>
+        </div>
+    </section>
+
+    <section class="info-contacto" id="contacto">
+        <h2>Información de contacto</h2>
+        <h4 style="display: inline-block; margin-right: 20px;">📞 +57 313 650 7966</h4>
+        <h4 style="display: inline-block;">📍 Popayan, Colombia</h4>
+
+
+        <div class="redes-sociales">
+            <a href="https://facebook.com" target="_blank"><img src="img/facebook_blanco.svg" alt="Facebook"></a>
+            <a href="https://instagram.com" target="_blank"><img src="img/instagram_blanco.svg" alt="Instagram"></a>
+            <a href="https://tiktok.com" target="_blank"><img src="img/tik-tok_blanco.svg" alt="TikTok"></a>
+        </div>
+
+        <hr>
+
+        <div class="politicas">
+            <span>© 2025 Nombre de la Empresa</span>
+            <a href="#">Políticas de privacidad</a>
+            <a href="#">Políticas de reembolso</a>
+            <a href="#">Políticas de envío</a>
+            <a href="#">Información de contacto</a>
+            <a href="#">Términos de servicio</a>
+        </div>
+    </section>
+
+
+
+
+    <script>
+        function toggleMenu() {
+            const nav = document.querySelector(".nav-menu");
+            nav.classList.toggle("active");
+        }
+    </script>
+    <script src="scrip.js"></script>
+</body>
+</html>
