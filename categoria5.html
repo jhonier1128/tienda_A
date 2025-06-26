@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categoría 5 - Accesorios</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header copiado/adaptado de index.html -->
+    <header class="header" id="inicio">
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html"><img src="img/logo_oficial.png" alt="Logo Empresa" /></a>
+            </div>
+            <nav class="nav-menu-desktop">
+                <ul>
+                    <li><a href="index.html#inicio">Inicio</a></li>
+                    <li><a href="index.html#categoria">Catálogo</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="iconos">
+                <a href="#"><img src="img/icons8-search.svg" alt="Buscar" /></a>
+                <a href="#" class="usuario-desktop" id="userIconDesktop"><img src="img/user-icon-svgrepo-com.svg" alt="Usuario" /></a>
+                <a href="#"><img src="img/shopping-cart.svg" alt="Carrito" /></a>
+            </div>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div> <!-- Asumimos que toggleMenu está en script.js global -->
+        </div>
+        <nav class="nav-menu" id="nav"> <!-- Menú móvil -->
+            <ul>
+                <li><a href="index.html#inicio">Inicio</a></li>
+                <li><a href="index.html#categoria">Catálogo</a></li>
+                <li><a href="index.html#contacto">Contacto</a></li>
+            </ul>
+             <div class="usuario-mobile" id="userAreaMobile">
+                <a href="#"><img src="img/user-icon-svgrepo-com.svg" alt="Usuario" /></a>
+                <span id="textoUsuarioMobile">Iniciar sesión</span>
+            </div>
+            <div class="redes-menu">
+                <a href="https://facebook.com"><img src="img/facebook.svg" alt="Facebook"></a>
+                <a href="https://instagram.com"><img src="img/instagram.svg" alt="Instagram"></a>
+                <a href="https://tiktok.com"><img src="img/tiktok.svg" alt="TikTok"></a>
+            </div>
+        </nav>
+    </header>
+
+    <h1 class="page-title">Accesorios Destacados - Categoría 5</h1>
+
+    <main class="product-grid">
+        <!-- Producto 1 -->
+        <div class="product-card">
+            <img src="img/chaqueta2.jpeg" alt="Gorra Premium">
+            <h3>Gorra Premium</h3>
+            <p class="price">$19.99</p>
+            <div class="details">
+                <p>Cantidad: 15</p>
+                <p>Colores: Negro, Azul Marino</p>
+            </div>
+            <a href="#" class="btn-add-to-cart">Añadir al Carrito</a>
+        </div>
+
+        <!-- Producto 2 -->
+        <div class="product-card">
+            <img src="img/chaqueta3.jpeg" alt="Cinturón de Cuero">
+            <h3>Cinturón de Cuero</h3>
+            <p class="price">$24.99</p>
+            <div class="details">
+                <p>Cantidad: 10</p>
+                <p>Colores: Gris, Verde Olivo</p>
+            </div>
+            <a href="#" class="btn-add-to-cart">Añadir al Carrito</a>
+        </div>
+
+        <!-- Producto 3 -->
+        <div class="product-card">
+            <img src="img/chaqueta1.jpeg" alt="Bufanda Elegante">
+            <h3>Bufanda Elegante</h3>
+            <p class="price">$22.99</p>
+            <div class="details">
+                <p>Cantidad: 7</p>
+                <p>Colores: Rojo, Blanco</p>
+            </div>
+            <a href="#" class="btn-add-to-cart">Añadir al Carrito</a>
+        </div>
+    </main>
+
+    <footer class="simple-footer">
+        <p>&copy; 2025 Nombre de la Empresa. Todos los derechos reservados.</p>
+        <p><a href="index.html">Volver a la página principal</a></p>
+    </footer>
+
+    <script src="scrip.js"></script> <!-- Para la funcionalidad del menú hamburguesa -->
+</body>
+</html>
