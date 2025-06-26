@@ -22,254 +22,47 @@ function buscarProductos(termino) {
     });
 }
 
-// Event listener para el icono de búsqueda
-// Es importante que este script se ejecute después de que el DOM esté cargado,
-// o que el icono searchIcon ya exista en el DOM.
-// Si scrip.js se carga al final del body, esto debería funcionar.
 const searchIcon = document.getElementById('searchIcon');
 if (searchIcon) {
     searchIcon.addEventListener('click', (event) => {
         event.preventDefault();
         const terminoBusqueda = window.prompt("Buscar producto:");
-
         if (terminoBusqueda && terminoBusqueda.trim() !== "") {
             const resultados = buscarProductos(terminoBusqueda.trim());
             localStorage.setItem('searchResults', JSON.stringify(resultados));
-            localStorage.setItem('searchTerm', terminoBusqueda.trim()); // Guardar también el término
+            localStorage.setItem('searchTerm', terminoBusqueda.trim());
             window.location.href = 'resultados_busqueda.html';
-        } else if (terminoBusqueda !== null) { // Si el usuario no canceló, pero dejó vacío
+        } else if (terminoBusqueda !== null) {
             alert("Por favor, ingrese un término de búsqueda.");
         }
     });
 }
 
-//slider de texto 
-
-// --- Lógica del Modal de Registro ---
-const userIconDesktop = document.getElementById('userIconDesktop');
-const userAreaMobile = document.getElementById('userAreaMobile');
-let activeModal = null; // Para rastrear el modal activo y evitar duplicados
-
-function cerrarRegistroModal() {
-    if (activeModal) {
-        activeModal.remove(); // Elimina el modal del DOM
-        activeModal = null;
-    }
-}
-
-function abrirRegistroModal() {
-    // Si ya hay un modal (de cualquier tipo, aunque aquí solo tenemos uno), ciérralo primero
-    if (activeModal) {
-        cerrarRegistroModal();
-    }
-
-    const modalDiv = document.createElement('div');
-    modalDiv.id = 'registroModal'; // Usado por CSS y potencialmente por cerrarRegistroModal
-    modalDiv.className = 'modal modal-visible'; // La clase .modal para estilos base, .modal-visible para mostrarlo
-
-    fetch('registro_modal_content.html')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.text();
-        })
-        .then(htmlContent => {
-            modalDiv.innerHTML = htmlContent;
-            document.body.appendChild(modalDiv);
-            activeModal = modalDiv; // Guardar referencia al modal activo
-
-            // Adjuntar listener al botón de cierre DENTRO del contenido cargado
-            const closeButton = document.getElementById('closeRegistroModalContent');
-            if (closeButton) {
-                closeButton.addEventListener('click', cerrarRegistroModal);
-            }
-
-            // Adjuntar listener para cerrar al hacer clic en el overlay
-            modalDiv.addEventListener('click', (event) => {
-                if (event.target === modalDiv) { // Si el clic fue directamente en el overlay
-                    cerrarRegistroModal();
-                }
-            });
-
-            // Adjuntar listener al formulario (la lógica de submit se hará en el siguiente paso del plan)
-            const registroForm = document.getElementById('registroForm');
-            if (registroForm) {
-                registroForm.addEventListener('submit', handleRegistroSubmit); // handleRegistroSubmit se definirá después
-            }
-        })
-        .catch(error => {
-            console.error('Error al cargar el modal de registro:', error);
-            alert('Hubo un error al cargar el formulario de registro. Inténtelo más tarde.');
-            // Limpiar modalDiv si se creó pero falló la carga de contenido
-            if (modalDiv.parentElement) {
-                modalDiv.remove();
-            }
-            activeModal = null;
-        });
-}
-
-// --- Cerrar Sesión y Manejador de Acción de Usuario ---
-function cerrarSesion() {
-    localStorage.removeItem('usuarioRegistrado');
-    actualizarUIUsuario(); // Refresca la UI para mostrar estado "no logueado"
-    alert('Has cerrado sesión.');
-}
-
-function handleUserAction(event) {
-    event.preventDefault();
-    if (localStorage.getItem('usuarioRegistrado')) {
-        cerrarSesion();
-    } else {
-        abrirRegistroModal();
-    }
-}
-
-if (userIconDesktop) {
-    userIconDesktop.addEventListener('click', handleUserAction);
-}
-
-if (userAreaMobile) {
-    // Asegurarse de que el evento se asigna al elemento clickeable correcto.
-    // Si userAreaMobile es el div, y dentro hay un <a>, podría ser mejor asignar al <a>
-    // o permitir que el clic en el div funcione. Por ahora, al div.
-    userAreaMobile.addEventListener('click', handleUserAction);
-}
-
-// Función que maneja el submit del formulario de registro
-function handleRegistroSubmit(event) {
-    event.preventDefault();
-
-    const nombreInput = document.getElementById('nombre');
-    const apellidoInput = document.getElementById('apellido');
-    const telefonoInput = document.getElementById('telefono');
-    const correoInput = document.getElementById('correo');
-
-    // Validación simple (los campos required del HTML ya hacen la mayoría del trabajo)
-    if (!nombreInput || !apellidoInput || !telefonoInput || !correoInput ) {
-        // Esto es una guarda por si el contenido del modal no se cargó correctamente
-        // y los elementos no existen. La validación de valor se hace después.
-        console.error("Uno o más campos del formulario no se encontraron en el DOM.");
-        alert("Error en el formulario. Intente abrir el registro de nuevo.");
-        return;
-    }
-
-    if (!nombreInput.value.trim() || !apellidoInput.value.trim() || !telefonoInput.value.trim() || !correoInput.value.trim()) {
-        alert("Por favor, complete todos los campos.");
-        return;
-    }
-
-    const usuario = {
-        nombre: nombreInput.value.trim(),
-        apellido: apellidoInput.value.trim(),
-        telefono: telefonoInput.value.trim(),
-        correo: correoInput.value.trim()
-    };
-
-    try {
-        localStorage.setItem('usuarioRegistrado', JSON.stringify(usuario));
-        alert("¡Registro exitoso!"); // Mensaje de éxito
-
-        cerrarRegistroModal();
-        actualizarUIUsuario(); // Esta función se definirá en el siguiente paso
-
-    } catch (e) {
-        console.error("Error al guardar en localStorage:", e);
-        alert("Hubo un error al guardar el registro. Es posible que el almacenamiento esté lleno o deshabilitado.");
-    }
-}
-
-// Placeholder para actualizarUIUsuario, se definirá después
-// Será llamada al cargar la página y después de un registro/logout exitoso.
-function actualizarUIUsuario() {
-    const usuarioRegistradoJSON = localStorage.getItem('usuarioRegistrado');
-    const textoUsuarioMobileEl = document.getElementById('textoUsuarioMobile');
-    const userIconDesktopEl = document.getElementById('userIconDesktop'); // El enlace <a>
-
-    if (usuarioRegistradoJSON) {
-        try {
-            const usuario = JSON.parse(usuarioRegistradoJSON);
-            if (textoUsuarioMobileEl) {
-                textoUsuarioMobileEl.textContent = `Hola, ${usuario.nombre}`;
-            }
-            if (userIconDesktopEl) {
-                // Cambiamos el title del enlace para que muestre el nombre al pasar el mouse
-                // y podríamos cambiar su comportamiento para cerrar sesión más adelante.
-                userIconDesktopEl.title = `Sesión iniciada como ${usuario.nombre} ${usuario.apellido}`;
-            }
-
-        } catch (e) {
-            console.error("Error al parsear datos de usuario desde localStorage:", e);
-            // Si hay error, tratar como si no hubiera sesión
-            if (textoUsuarioMobileEl) {
-                textoUsuarioMobileEl.textContent = "Iniciar sesión";
-            }
-            if (userIconDesktopEl) {
-                userIconDesktopEl.title = "Iniciar sesión / Registrarse";
-            }
-        }
-    } else {
-        if (textoUsuarioMobileEl) {
-            textoUsuarioMobileEl.textContent = "Iniciar sesión";
-        }
-        if (userIconDesktopEl) {
-            userIconDesktopEl.title = "Iniciar sesión / Registrarse";
-        }
-    }
-}
-// --- Fin Lógica del Modal de Registro ---
-
 // --- Lógica del Carrito de Compras ---
-let shoppingCart = []; // Variable para mantener el estado del carrito en memoria
+let shoppingCart = [];
 
 function getCart() {
     const cartJSON = localStorage.getItem('shoppingCart');
     if (cartJSON) {
-        try {
-            return JSON.parse(cartJSON);
-        } catch (e) {
-            console.error("Error al parsear el carrito desde localStorage:", e);
-            return []; // Devuelve carrito vacío si hay error
-        }
+        try { return JSON.parse(cartJSON); }
+        catch (e) { console.error("Error al parsear carrito:", e); return []; }
     }
-    return []; // Devuelve carrito vacío si no existe en localStorage
+    return [];
 }
 
 function saveCart(cartArray) {
-    try {
-        localStorage.setItem('shoppingCart', JSON.stringify(cartArray));
-        // Podríamos disparar un evento personalizado aquí si otras partes de la app necesitan saber que el carrito cambió.
-        // document.dispatchEvent(new CustomEvent('cartUpdated'));
-        // updateCartIconCount(); // Actualizar contador del ícono del carrito
-    } catch (e) {
-        console.error("Error al guardar el carrito en localStorage:", e);
-        alert("Hubo un error al actualizar el carrito. Puede que el almacenamiento esté lleno.");
-    }
+    try { localStorage.setItem('shoppingCart', JSON.stringify(cartArray)); }
+    catch (e) { console.error("Error al guardar carrito:", e); alert("Error al actualizar carrito."); }
 }
 
 function initCart() {
     shoppingCart = getCart();
-    // console.log("Carrito inicializado:", shoppingCart); // Para depuración
-    // updateCartIconCount();
 }
 
-// Placeholder para funciones futuras del carrito
-// function updateCartIconCount() {
-//     const cartItemCount = shoppingCart.reduce((total, item) => total + item.cantidad, 0);
-//     const cartIconCounter = document.getElementById('cartIconCounter'); // Asumir que existe un span para el contador
-//     if (cartIconCounter) {
-//         cartIconCounter.textContent = cartItemCount > 0 ? cartItemCount : '';
-//         cartIconCounter.style.display = cartItemCount > 0 ? 'inline' : 'none';
-//     }
-// }
-// function abrirCarritoModal() { /* ... se definirá después ... */ }
-// function cerrarCarritoModal() { /* ... se definirá después ... */ }
-// function renderCartItems() { /* ... se definirá después ... */ }
-
 function handleAddToCart(event) {
+    console.log("handleAddToCart llamado por:", event.target); // DEBUG LOG
     event.preventDefault();
-    const button = event.target.closest('.btn-add-to-cart'); // Asegurarse de obtener el botón si hay elementos hijos
-
+    const button = event.target.closest('.btn-add-to-cart');
     if (!button) return;
 
     const productId = button.dataset.productId;
@@ -278,46 +71,28 @@ function handleAddToCart(event) {
     const productImage = button.dataset.productImage;
 
     if (!productId || !productName || isNaN(productPrice) || !productImage) {
-        console.error("Faltan datos del producto en el botón:", button.dataset);
-        alert("Error: No se pudo añadir el producto, faltan datos.");
+        console.error("Faltan datos del producto:", button.dataset);
+        alert("Error: datos de producto incompletos.");
         return;
     }
 
-    // Encontrar los inputs de cantidad y color asociados
-    // Asumimos que están dentro del mismo .product-card o un contenedor común cercano
     const productCard = button.closest('.product-card');
     let quantityInput, colorSelect;
-
     if (productCard) {
         quantityInput = productCard.querySelector(`.product-quantity[data-product-ref="${productId}"]`);
         colorSelect = productCard.querySelector(`.product-color[data-product-ref="${productId}"]`);
     } else {
-        // Fallback por si la estructura es diferente o el botón está fuera de un .product-card
-        // (por ejemplo, en las ofertas de index.html que aún no hemos adaptado)
-        quantityInput = document.getElementById(`quantity-${productId}`); // Asume ID único si no está en tarjeta
+        quantityInput = document.getElementById(`quantity-${productId}`);
         colorSelect = document.getElementById(`color-${productId}`);
     }
 
     let quantity = 1;
     if (quantityInput) {
         quantity = parseInt(quantityInput.value, 10);
-        if (isNaN(quantity) || quantity < 1) {
-            alert("Por favor, ingrese una cantidad válida.");
-            quantityInput.value = 1;
-            return;
-        }
-    } else {
-        // Si no hay input de cantidad (ej. ofertas en index.html), se asume 1.
-        // console.warn(`Input de cantidad no encontrado para producto ID: ${productId}. Usando cantidad 1.`);
+        if (isNaN(quantity) || quantity < 1) { alert("Cantidad inválida."); quantityInput.value = 1; return; }
     }
-
     let color = 'default';
-    if (colorSelect) {
-        color = colorSelect.value;
-    } else {
-        // Si no hay select de color, se asume 'default'.
-        // console.warn(`Select de color no encontrado para producto ID: ${productId}. Usando color por defecto.`);
-    }
+    if (colorSelect) color = colorSelect.value;
 
     const cartItemId = `${productId}_${color}`;
     const existingItemIndex = shoppingCart.findIndex(item => item.cartId === cartItemId);
@@ -325,53 +100,32 @@ function handleAddToCart(event) {
     if (existingItemIndex > -1) {
         shoppingCart[existingItemIndex].cantidad += quantity;
     } else {
-        const newItem = {
-            cartId: cartItemId,
-            id: productId,
-            nombre: productName,
-            precio: productPrice,
-            imagen: productImage,
-            cantidad: quantity,
-            color: color
-        };
-        shoppingCart.push(newItem);
+        shoppingCart.push({ cartId: cartItemId, id: productId, nombre: productName, precio: productPrice, imagen: productImage, cantidad: quantity, color: color });
     }
-
     saveCart(shoppingCart);
-    // updateCartIconCount();
     alert(`"${productName}" (Color: ${color}, Cant: ${quantity}) añadido al carrito.`);
-    // console.log("Carrito actualizado:", shoppingCart);
 }
 
 function attachAddToCartListeners() {
+    console.log("attachAddToCartListeners llamado"); // DEBUG LOG
     const addToCartButtons = document.querySelectorAll('.btn-add-to-cart');
+    console.log("Botones '.btn-add-to-cart' encontrados:", addToCartButtons.length); // DEBUG LOG
     addToCartButtons.forEach(button => {
-        // Remover listener anterior para evitar duplicados si se llama múltiples veces
+        console.log("Adjuntando listener a:", button); // DEBUG LOG
         button.removeEventListener('click', handleAddToCart);
         button.addEventListener('click', handleAddToCart);
     });
 }
 
-// --- Fin Lógica Base del Carrito de Compras ---
-
-// --- Lógica para Mostrar/Ocultar Modal del Carrito ---
-let activeCartModal = null; // Para rastrear el modal del carrito
+let activeCartModal = null;
 
 function cerrarCarritoModal() {
-    if (activeCartModal) {
-        activeCartModal.remove();
-        activeCartModal = null;
-    }
+    if (activeCartModal) { activeCartModal.remove(); activeCartModal = null; }
 }
 
 function abrirCarritoModal() {
-    if (activeCartModal) {
-        return;
-    }
-    if (activeModal) { // Si el modal de registro (u otro) está activo
-        activeModal.remove();
-        activeModal = null;
-    }
+    if (activeCartModal) return;
+    // No activeModal (registro) check needed as it was removed
 
     const modalDiv = document.createElement('div');
     modalDiv.id = 'cartModal';
@@ -379,46 +133,32 @@ function abrirCarritoModal() {
 
     fetch('carrito_modal_content.html')
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
+            if (!response.ok) throw new Error('Network response was not ok ' + response.statusText);
             return response.text();
         })
         .then(htmlContent => {
             modalDiv.innerHTML = htmlContent;
             document.body.appendChild(modalDiv);
             activeCartModal = modalDiv;
-
-            renderCartItems(); // Se definirá en el siguiente paso
+            renderCartItems();
 
             const closeButton = document.getElementById('closeCartModalContentButton');
-            if (closeButton) {
-                closeButton.addEventListener('click', cerrarCarritoModal);
-            }
+            if (closeButton) closeButton.addEventListener('click', cerrarCarritoModal);
 
             modalDiv.addEventListener('click', (event) => {
-                if (event.target === modalDiv) {
-                    cerrarCarritoModal();
-                }
+                if (event.target === modalDiv) cerrarCarritoModal();
             });
 
             const checkoutButton = document.getElementById('checkoutButton');
             if (checkoutButton) {
-                checkoutButton.addEventListener('click', () => {
-                    if(shoppingCart.length === 0){
-                        alert("Tu carrito está vacío.");
-                        return;
-                    }
-                    alert("Procediendo al pago (funcionalidad no implementada).");
-                });
+                // El listener ahora llama a handleCheckout, que a su vez llamará a abrirMediosPagoModal
+                checkoutButton.addEventListener('click', handleCheckout);
             }
         })
         .catch(error => {
-            console.error('Error al cargar el modal del carrito:', error);
-            alert('Hubo un error al cargar el carrito. Inténtelo más tarde.');
-            if (modalDiv.parentElement) {
-                modalDiv.remove();
-            }
+            console.error('Error al cargar modal del carrito:', error);
+            alert('Hubo un error al cargar el carrito.');
+            if (modalDiv.parentElement) modalDiv.remove();
             activeCartModal = null;
         });
 }
@@ -431,43 +171,47 @@ if (cartIcon) {
     });
 }
 
-// Placeholder para renderCartItems - se completará en el siguiente paso
 function renderCartItems() {
+    console.log("renderCartItems - Carrito actual:", JSON.parse(JSON.stringify(shoppingCart)));
+
     const cartItemsList = document.getElementById('cartItemsList');
     const cartTotalAmountEl = document.getElementById('cartTotalAmountValue');
     const emptyCartMessageEl = document.getElementById('emptyCartMessage');
 
     if (!cartItemsList || !cartTotalAmountEl || !emptyCartMessageEl) {
-        console.error("Elementos del modal del carrito no encontrados. No se puede renderizar.");
+        console.error("Elementos del modal del carrito no encontrados en renderCartItems. IDs esperados: cartItemsList, cartTotalAmountValue, emptyCartMessage");
         return;
     }
 
-    cartItemsList.innerHTML = '';
+    cartItemsList.innerHTML = ''; // Limpiar items anteriores
     let totalGeneral = 0;
 
     if (shoppingCart.length === 0) {
-        if(emptyCartMessageEl) emptyCartMessageEl.style.display = 'block';
-        // cartItemsList.innerHTML = '<p id="emptyCartMessage">Tu carrito está vacío.</p>'; // El p ya existe
+        emptyCartMessageEl.style.display = 'block';
+        cartItemsList.style.display = 'none';
     } else {
-        if(emptyCartMessageEl) emptyCartMessageEl.style.display = 'none';
+        emptyCartMessageEl.style.display = 'none';
+        cartItemsList.style.display = 'block';
         shoppingCart.forEach(item => {
             const itemSubtotal = item.precio * item.cantidad;
             totalGeneral += itemSubtotal;
 
-            const itemHTML = `
-                <div class="cart-item" data-cart-item-id="${item.cartId}">
-                    <img src="${item.imagen}" alt="${item.nombre}" class="cart-item-image">
-                    <div class="cart-item-details">
-                        <p class="cart-item-name">${item.nombre}</p>
-                        <p class="cart-item-price">$${item.precio.toFixed(2)}</p>
-                        <p class="cart-item-color">Color: ${item.color}</p>
-                        <p class="cart-item-quantity">Cantidad: ${item.cantidad}</p>
-                    </div>
-                    <p class="cart-item-subtotal">$${itemSubtotal.toFixed(2)}</p>
-                    <button class="cart-item-remove" data-cart-item-id="${item.cartId}">&times; Eliminar</button>
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'cart-item';
+            itemDiv.dataset.cartItemId = item.cartId;
+            itemDiv.innerHTML = `
+                <img src="${item.imagen}" alt="${item.nombre}" class="cart-item-image">
+                <div class="cart-item-details">
+                    <p class="cart-item-name">${item.nombre}</p>
+                    <p class="cart-item-price">$${item.precio.toFixed(2)}</p>
+                    <p class="cart-item-color">Color: ${item.color}</p>
+                    <p class="cart-item-quantity">Cantidad: ${item.cantidad}</p>
                 </div>
+                <p class="cart-item-subtotal">$${itemSubtotal.toFixed(2)}</p>
+                <button class="cart-item-remove" data-cart-item-id="${item.cartId}">&times; Eliminar</button>
             `;
-            cartItemsList.innerHTML += itemHTML;
+            // console.log("Renderizando item:", item.nombre);
+            cartItemsList.appendChild(itemDiv);
         });
     }
 
@@ -486,57 +230,179 @@ function attachRemoveItemListeners() {
     });
 }
 
-// La función handleRemoveItem se definirá en el siguiente paso del plan.
 function handleRemoveItem(event) {
+    console.log("handleRemoveItem - event.target:", event.target);
     const cartItemIdToRemove = event.target.dataset.cartItemId;
+    console.log("handleRemoveItem - cartItemIdToRemove:", cartItemIdToRemove);
 
     if (!cartItemIdToRemove) {
-        console.error("No se pudo identificar el item a eliminar del carrito.");
+        console.error("ID de item a eliminar no encontrado en el dataset del botón.");
         return;
     }
 
-    // Filtrar el array shoppingCart para remover el item
     shoppingCart = shoppingCart.filter(item => item.cartId !== cartItemIdToRemove);
+    console.log("handleRemoveItem - Carrito DESPUÉS de filter:", JSON.parse(JSON.stringify(shoppingCart)));
 
-    saveCart(shoppingCart); // Guardar el carrito actualizado en localStorage
-    renderCartItems();      // Volver a renderizar el modal del carrito
-    // updateCartIconCount(); // Actualizar el contador del icono del carrito
+    saveCart(shoppingCart);
 
-    // console.log(`Item ${cartItemIdToRemove} eliminado. Carrito:`, shoppingCart);
+    console.log("handleRemoveItem - Llamando a renderCartItems...");
+    renderCartItems();
 }
 // --- Fin Lógica Modal Carrito ---
 
+// --- Lógica para Modal de Medios de Pago ---
+let activeMediosPagoModal = null; // Para rastrear el modal de medios de pago
 
+function cerrarMediosPagoModal() {
+    if (activeMediosPagoModal) {
+        activeMediosPagoModal.remove();
+        activeMediosPagoModal = null;
+    }
+}
+
+function abrirMediosPagoModal() {
+    if (activeMediosPagoModal) return; // Ya está abierto
+
+    cerrarCarritoModal(); // Cerrar el modal del carrito primero
+
+    const modalDiv = document.createElement('div');
+    modalDiv.id = 'mediosPagoModal';
+    modalDiv.className = 'modal modal-visible';
+
+    fetch('medios_pago_modal_content.html')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok for medios_pago_modal_content.html');
+            }
+            return response.text();
+        })
+        .then(htmlContent => {
+            modalDiv.innerHTML = htmlContent;
+            document.body.appendChild(modalDiv);
+            activeMediosPagoModal = modalDiv;
+
+            // Adjuntar listeners a los botones del nuevo modal
+            const closeBtn = document.getElementById('closeMediosPagoModalButton');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', cerrarMediosPagoModal);
+            }
+
+            const cancelBtn = document.getElementById('cancelMediosPagoButton');
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', cerrarMediosPagoModal);
+            }
+
+            const sendWhatsAppBtn = document.getElementById('sendOrderWhatsAppButton');
+            if (sendWhatsAppBtn) {
+                sendWhatsAppBtn.addEventListener('click', enviarPedidoWhatsApp); // Se definirá después
+            }
+
+            // Cerrar al hacer clic en el overlay
+            modalDiv.addEventListener('click', (event) => {
+                if (event.target === modalDiv) {
+                    cerrarMediosPagoModal();
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error al cargar el modal de medios de pago:', error);
+            alert('Hubo un error al mostrar los medios de pago.');
+            if (modalDiv.parentElement) { // Si el div se añadió al body antes del error
+                modalDiv.remove();
+            }
+            activeMediosPagoModal = null;
+        });
+}
+
+// Placeholder para enviarPedidoWhatsApp
+function enviarPedidoWhatsApp() {
+    if (shoppingCart.length === 0) {
+        alert("Tu carrito está vacío. Añade productos antes de enviar el pedido.");
+        return;
+    }
+
+    const TU_NUMERO_WHATSAPP = "573001234567"; // ¡¡¡REEMPLAZAR CON TU NÚMERO REAL!!! Ej: 573001234567
+
+    let mensajePedido = "¡Hola! Quisiera realizar el siguiente pedido:\\n\\n";
+    let totalGeneralPedido = 0;
+
+    shoppingCart.forEach(item => {
+        const subtotalItem = item.precio * item.cantidad;
+        mensajePedido += `Producto: ${item.nombre}\\n`;
+        mensajePedido += `Color: ${item.color}\\n`;
+        mensajePedido += `Cantidad: ${item.cantidad}\\n`;
+        mensajePedido += `Precio Unitario: $${item.precio.toFixed(2)}\\n`;
+        mensajePedido += `Subtotal: $${subtotalItem.toFixed(2)}\\n\\n`;
+        totalGeneralPedido += subtotalItem;
+    });
+
+    mensajePedido += `-----------------------------------\\n`;
+    mensajePedido += `TOTAL DEL PEDIDO: $${totalGeneralPedido.toFixed(2)}\\n\\n`;
+    mensajePedido += `Agradezco la confirmación y los próximos pasos.\\n`;
+
+    const encodedMensaje = encodeURIComponent(mensajePedido);
+    const whatsappURL = `https://api.whatsapp.com/send?phone=${TU_NUMERO_WHATSAPP}&text=${encodedMensaje}`;
+
+    window.open(whatsappURL, '_blank');
+
+    alert("Serás redirigido a WhatsApp para enviar tu pedido. Una vez enviado, tu carrito se vaciará.");
+
+    shoppingCart = [];
+    saveCart(shoppingCart);
+
+    cerrarMediosPagoModal();
+    if (activeCartModal) { // Aunque ya debería estar cerrado por abrirMediosPagoModal
+        cerrarCarritoModal();
+    }
+    // updateCartIconCount();
+}
+
+// Handler para el botón de checkout del carrito
+function handleCheckout() {
+    if(shoppingCart.length === 0){
+        alert("Tu carrito está vacío.");
+        return;
+    }
+    // console.log("Cerrando modal del carrito antes de abrir medios de pago...");
+    // cerrarCarritoModal(); // Se llamará dentro de abrirMediosPagoModal
+    abrirMediosPagoModal();
+}
+// --- Fin Lógica para Modal de Medios de Pago ---
+
+// Slider de texto (original)
 const slider = document.getElementById("slider");
-let index = 0;
+if (slider) {
+    let index = 0;
+    setInterval(() => {
+      index = (index + 1) % 3; // Asumiendo 3 slides de texto
+      slider.style.transform = `translateX(-${index * 100}vw)`;
+    }, 10000);
+}
 
-setInterval(() => {
-  index = (index + 1) % 3;
-  slider.style.transform = `translateX(-${index * 100}vw)`;
-}, 10000);
-//menu hamburguesa
-  function toggleMenu() {
-    document.querySelector('.nav-menu').classList.toggle('active');
-  }
+// Menu hamburguesa (original)
+function toggleMenu() {
+    const navMenu = document.querySelector('.nav-menu');
+    if (navMenu) {
+        navMenu.classList.toggle('active');
+    }
+}
 
-let sliderInner = document.querySelector(".slider1--inner");
+// Slider de imágenes (original, con correcciones)
+const sliderInner = document.querySelector(".slider1--inner");
+if (sliderInner) {
+    const images = sliderInner.querySelectorAll("img");
+    if (images.length > 0) {
+        let imageIndex = 0;
+        function changeImageSlide() {
+            imageIndex = (imageIndex + 1) % images.length;
+            let percentage = imageIndex * -100;
+            sliderInner.style.transform = "translateX(" + percentage + "%)";
+        }
+        setInterval(changeImageSlide, 5000);
+    }
+}
 
-let images = sliderInner.querySelectorAll("img");
-
-let index1 = 1;
-
-setInterval(function(){
-  let percentage = index1 * -100;
-  sliderInner.style.transform = "translateX(" + percentage + "%)";
-  index1++;
-  if(index1 > images.length - 1){
-    index1 = 0;
-  }
-}, 30000);
-
-// Llamar a actualizarUIUsuario al cargar la página para reflejar el estado de sesión
-actualizarUIUsuario();
-// Llamar a initCart para cargar el carrito desde localStorage al iniciar
+// Llamadas iniciales al cargar la página
+// (Llamada a actualizarUIUsuario eliminada)
 initCart();
-// Adjuntar listeners a los botones "Añadir al Carrito" existentes en la página
 attachAddToCartListeners();
