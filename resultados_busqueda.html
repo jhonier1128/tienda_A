@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de Búsqueda</title>
+    <link rel="stylesheet" href="style.css"> <!-- Reutiliza los estilos existentes -->
+</head>
+<body>
+
+    <!-- Header (similar a categoria1.html y index.html) -->
+    <header class="header" id="inicio">
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html"><img src="img/logo_oficial.png" alt="Logo Empresa" /></a>
+            </div>
+            <nav class="nav-menu-desktop">
+                <ul>
+                    <li><a href="index.html#inicio">Inicio</a></li>
+                    <li><a href="index.html#categoria">Catálogo</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="iconos">
+                <a href="#" id="searchIcon"><img src="img/icons8-search.svg" alt="Buscar" /></a>
+                <a href="#" class="usuario-desktop" id="userIconDesktop"><img src="img/user-icon-svgrepo-com.svg" alt="Usuario" /></a>
+                <a href="#"><img src="img/shopping-cart.svg" alt="Carrito" /></a>
+            </div>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        </div>
+        <nav class="nav-menu" id="nav">
+            <ul>
+                <li><a href="index.html#inicio">Inicio</a></li>
+                <li><a href="index.html#categoria">Catálogo</a></li>
+                <li><a href="index.html#contacto">Contacto</a></li>
+            </ul>
+             <div class="usuario-mobile" id="userAreaMobile">
+                <a href="#"><img src="img/user-icon-svgrepo-com.svg" alt="Usuario" /></a>
+                <span id="textoUsuarioMobile">Iniciar sesión</span>
+            </div>
+            <div class="redes-menu">
+                <a href="https://facebook.com"><img src="img/facebook.svg" alt="Facebook"></a>
+                <a href="https://instagram.com"><img src="img/instagram.svg" alt="Instagram"></a>
+                <a href="https://tiktok.com"><img src="img/tiktok.svg" alt="TikTok"></a>
+            </div>
+        </nav>
+    </header>
+
+    <h1 id="pageTitle" class="page-title">Resultados de Búsqueda</h1>
+
+    <main id="resultsGrid" class="product-grid">
+        <!-- Los resultados de la búsqueda se insertarán aquí -->
+    </main>
+
+    <div id="noResultsMessage">
+        <p>No se encontraron productos.</p>
+    </div>
+
+    <footer class="simple-footer">
+        <p>&copy; 2025 Nombre de la Empresa. Todos los derechos reservados.</p>
+        <p><a href="index.html">Volver a la página principal</a></p>
+    </footer>
+
+    <script src="scrip.js"></script> <!-- Para toggleMenu y la lógica de búsqueda (aunque no se use aquí directamente, el header puede necesitarlo) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchTerm = localStorage.getItem('searchTerm');
+            const searchResultsJSON = localStorage.getItem('searchResults');
+            const resultsGrid = document.getElementById('resultsGrid');
+            const pageTitle = document.getElementById('pageTitle');
+            const noResultsMessage = document.getElementById('noResultsMessage');
+
+            if (searchTerm) {
+                pageTitle.textContent = `Resultados para: "${searchTerm}"`;
+            }
+
+            if (searchResultsJSON) {
+                const searchResults = JSON.parse(searchResultsJSON);
+
+                if (searchResults && searchResults.length > 0) {
+                    resultsGrid.innerHTML = ''; // Limpiar cualquier contenido placeholder
+                    searchResults.forEach(producto => {
+                        const productCard = `
+                            <div class="product-card">
+                                <img src="${producto.imagen}" alt="${producto.nombre}">
+                                <h3>${producto.nombre}</h3>
+                                <p class="price">$${producto.precio.toFixed(2)}</p>
+                                <div class="details">
+                                    <p>${producto.descripcion}</p>
+                                    <p>Categoría: ${producto.categoria}</p>
+                                </div>
+                                <a href="#" class="btn-add-to-cart" data-product-id="${producto.id}" data-product-name="${producto.nombre}" data-product-price="${producto.precio}">Añadir al Carrito</a>
+                            </div>
+                        `;
+                        resultsGrid.innerHTML += productCard;
+                    });
+                } else {
+                    resultsGrid.style.display = 'none';
+                    noResultsMessage.innerHTML = `<p>No se encontraron productos para "${searchTerm || 'tu búsqueda'}".</p>`;
+                    noResultsMessage.style.display = 'block';
+                }
+
+                // Opcional: Limpiar localStorage después de usar los datos
+                // localStorage.removeItem('searchResults');
+                // localStorage.removeItem('searchTerm');
+            } else {
+                resultsGrid.style.display = 'none';
+                noResultsMessage.innerHTML = `<p>No se encontraron resultados de búsqueda. Intenta buscar desde la página principal.</p>`;
+                noResultsMessage.style.display = 'block';
+            }
+
+            // Re-adjuntar listener de búsqueda al icono en esta página también, por si el usuario quiere buscar de nuevo
+            // (Esto asume que el searchIcon y la lógica de búsqueda están disponibles globalmente desde scrip.js)
+            const searchIconHeader = document.getElementById('searchIcon');
+            if (searchIconHeader && typeof productosDB !== 'undefined' && typeof buscarProductos === 'function') { // Verificar que las dependencias de scrip.js estén cargadas
+                searchIconHeader.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const terminoBusquedaHeader = window.prompt("Buscar producto:");
+                    if (terminoBusquedaHeader && terminoBusquedaHeader.trim() !== "") {
+                        const resultadosHeader = buscarProductos(terminoBusquedaHeader.trim());
+                        localStorage.setItem('searchResults', JSON.stringify(resultadosHeader));
+                        localStorage.setItem('searchTerm', terminoBusquedaHeader.trim());
+                        window.location.href = 'resultados_busqueda.html'; // Recargar la página de resultados
+                    } else if (terminoBusquedaHeader !== null) {
+                        alert("Por favor, ingrese un término de búsqueda.");
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

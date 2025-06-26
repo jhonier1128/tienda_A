@@ -656,3 +656,11 @@ hr {
     color: #FFEB3B;
     text-decoration: none;
 }
+
+#noResultsMessage {
+    text-align: center;
+    padding: 40px 20px; /* Más padding para que se note más */
+    font-size: 1.2rem;
+    color: #555;
+    display: none; /* Oculto por defecto, JS lo mostrará */
+}
