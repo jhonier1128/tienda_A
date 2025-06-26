@@ -55,10 +55,24 @@
             <h3>Gorra Premium</h3>
             <p class="price">$19.99</p>
             <div class="details">
-                <p>Cantidad: 15</p>
-                <p>Colores: Negro, Azul Marino</p>
+                <p>Disponibles: 15</p>
+                <p>Colores Base: Negro, Azul Marino</p>
             </div>
-            <a href="#" class="btn-add-to-cart">Añadir al Carrito</a>
+            <div class="product-options">
+                <div>
+                    <label for="quantity-gorra">Cantidad:</label>
+                    <input type="number" id="quantity-gorra" class="product-quantity" value="1" min="1" data-product-ref="gorra">
+                </div>
+                <div>
+                    <label for="color-gorra">Color:</label>
+                    <select id="color-gorra" class="product-color" data-product-ref="gorra">
+                        <option value="negro">Negro</option>
+                        <option value="azul">Azul</option>
+                        <option value="blanco">Blanco</option>
+                    </select>
+                </div>
+            </div>
+            <a href="#" class="btn-add-to-cart" data-product-id="gorra" data-product-name="Gorra Premium" data-product-price="19.99" data-product-image="img/chaqueta2.jpeg">Añadir al Carrito</a>
         </div>
 
         <!-- Producto 2 -->
@@ -67,10 +81,23 @@
             <h3>Cinturón de Cuero</h3>
             <p class="price">$24.99</p>
             <div class="details">
-                <p>Cantidad: 10</p>
-                <p>Colores: Gris, Verde Olivo</p>
+                <p>Disponibles: 10</p>
+                <p>Colores Base: Gris, Verde Olivo</p>
             </div>
-            <a href="#" class="btn-add-to-cart">Añadir al Carrito</a>
+            <div class="product-options">
+                <div>
+                    <label for="quantity-cinturon">Cantidad:</label>
+                    <input type="number" id="quantity-cinturon" class="product-quantity" value="1" min="1" data-product-ref="cinturon">
+                </div>
+                <div>
+                    <label for="color-cinturon">Color:</label>
+                    <select id="color-cinturon" class="product-color" data-product-ref="cinturon">
+                        <option value="marron">Marrón</option>
+                        <option value="negro">Negro</option>
+                    </select>
+                </div>
+            </div>
+            <a href="#" class="btn-add-to-cart" data-product-id="cinturon" data-product-name="Cinturón de Cuero" data-product-price="24.99" data-product-image="img/chaqueta3.jpeg">Añadir al Carrito</a>
         </div>
 
         <!-- Producto 3 -->
@@ -79,10 +106,24 @@
             <h3>Bufanda Elegante</h3>
             <p class="price">$22.99</p>
             <div class="details">
-                <p>Cantidad: 7</p>
-                <p>Colores: Rojo, Blanco</p>
+                <p>Disponibles: 7</p>
+                <p>Colores Base: Rojo, Blanco</p>
             </div>
-            <a href="#" class="btn-add-to-cart">Añadir al Carrito</a>
+            <div class="product-options">
+                <div>
+                    <label for="quantity-bufanda">Cantidad:</label>
+                    <input type="number" id="quantity-bufanda" class="product-quantity" value="1" min="1" data-product-ref="bufanda">
+                </div>
+                <div>
+                    <label for="color-bufanda">Color:</label>
+                    <select id="color-bufanda" class="product-color" data-product-ref="bufanda">
+                        <option value="rojo">Rojo</option>
+                        <option value="azul">Azul</option>
+                        <option value="gris_patron">Gris con Patrón</option>
+                    </select>
+                </div>
+            </div>
+            <a href="#" class="btn-add-to-cart" data-product-id="bufanda" data-product-name="Bufanda Elegante" data-product-price="22.99" data-product-image="img/chaqueta1.jpeg">Añadir al Carrito</a>
         </div>
     </main>
 

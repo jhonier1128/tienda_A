@@ -665,6 +665,43 @@ hr {
     display: none; /* Oculto por defecto, JS lo mostrará */
 }
 
+/* Estilos para opciones de producto (cantidad, color) en product-card */
+.product-options {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    text-align: left; /* Alinear labels e inputs a la izquierda dentro de las opciones */
+}
+
+.product-options div {
+    margin-bottom: 10px;
+    display: flex; /* Para alinear label e input en la misma línea si es necesario */
+    align-items: center; /* Centrar verticalmente label e input */
+}
+
+.product-options label {
+    margin-right: 10px; /* Espacio entre label y el input/select */
+    font-size: 0.9rem;
+    color: #333;
+    flex-basis: 80px; /* Dar un ancho base al label */
+    flex-shrink: 0; /* Evitar que el label se encoja */
+}
+
+.product-options input[type="number"],
+.product-options select {
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    /* width: auto;  Dejar que el navegador o flex determine el ancho */
+    max-width: 120px; /* Evitar que sean demasiado anchos */
+    flex-grow: 1; /* Permitir que el input/select crezca */
+}
+
+.product-options input[type="number"] {
+    width: 60px; /* Ancho específico para cantidad */
+    flex-grow: 0; /* No permitir que crezca más allá de su ancho */
+}
+
 /* Estilos para el Modal Genérico */
 .modal {
     display: none; /* Oculto por defecto, se mostrará con JS */
@@ -745,4 +782,95 @@ hr {
 
 .modal-visible {
     display: block !important; /* Para asegurar que se muestre */
+}
+
+/* Estilos para el Modal del Carrito (complementan .modal y .modal-content) */
+
+#cartItemsList {
+    max-height: 300px; /* Altura máxima antes de scroll */
+    overflow-y: auto; /* Scroll vertical si hay muchos items */
+    margin-bottom: 15px;
+    padding-right: 10px; /* Espacio para la barra de scroll si aparece */
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 15px;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+    font-size: 0.9rem;
+}
+
+.cart-item-name {
+    font-weight: bold;
+    color: #333;
+    margin: 0 0 5px 0;
+}
+
+.cart-item-price,
+.cart-item-color,
+.cart-item-quantity {
+    margin: 2px 0;
+    color: #555;
+}
+
+.cart-item-subtotal {
+    font-weight: bold;
+    margin-left: 15px; /* Espacio antes del subtotal */
+    min-width: 70px; /* Para alinear un poco los subtotales */
+    text-align: right;
+}
+
+.cart-item-remove {
+    background-color: #ff6b6b; /* Un rojo suave para eliminar */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-left: 15px;
+}
+
+.cart-item-remove:hover {
+    background-color: #ee5253;
+}
+
+#cartTotalDisplay {
+    text-align: right;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+#emptyCartMessage {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+/* Reutilizar botón .btn-pedir para el checkout, pero asegurar que ocupe el ancho */
+#checkoutButton {
+    display: block; /* Para que ocupe el ancho y respete el margin-top */
+    width: 100%;
+    box-sizing: border-box; /* Para que padding no afecte el width:100% */
 }

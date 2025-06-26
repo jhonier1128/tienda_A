@@ -217,9 +217,294 @@ function actualizarUIUsuario() {
         }
     }
 }
-
-
 // --- Fin Lógica del Modal de Registro ---
+
+// --- Lógica del Carrito de Compras ---
+let shoppingCart = []; // Variable para mantener el estado del carrito en memoria
+
+function getCart() {
+    const cartJSON = localStorage.getItem('shoppingCart');
+    if (cartJSON) {
+        try {
+            return JSON.parse(cartJSON);
+        } catch (e) {
+            console.error("Error al parsear el carrito desde localStorage:", e);
+            return []; // Devuelve carrito vacío si hay error
+        }
+    }
+    return []; // Devuelve carrito vacío si no existe en localStorage
+}
+
+function saveCart(cartArray) {
+    try {
+        localStorage.setItem('shoppingCart', JSON.stringify(cartArray));
+        // Podríamos disparar un evento personalizado aquí si otras partes de la app necesitan saber que el carrito cambió.
+        // document.dispatchEvent(new CustomEvent('cartUpdated'));
+        // updateCartIconCount(); // Actualizar contador del ícono del carrito
+    } catch (e) {
+        console.error("Error al guardar el carrito en localStorage:", e);
+        alert("Hubo un error al actualizar el carrito. Puede que el almacenamiento esté lleno.");
+    }
+}
+
+function initCart() {
+    shoppingCart = getCart();
+    // console.log("Carrito inicializado:", shoppingCart); // Para depuración
+    // updateCartIconCount();
+}
+
+// Placeholder para funciones futuras del carrito
+// function updateCartIconCount() {
+//     const cartItemCount = shoppingCart.reduce((total, item) => total + item.cantidad, 0);
+//     const cartIconCounter = document.getElementById('cartIconCounter'); // Asumir que existe un span para el contador
+//     if (cartIconCounter) {
+//         cartIconCounter.textContent = cartItemCount > 0 ? cartItemCount : '';
+//         cartIconCounter.style.display = cartItemCount > 0 ? 'inline' : 'none';
+//     }
+// }
+// function abrirCarritoModal() { /* ... se definirá después ... */ }
+// function cerrarCarritoModal() { /* ... se definirá después ... */ }
+// function renderCartItems() { /* ... se definirá después ... */ }
+
+function handleAddToCart(event) {
+    event.preventDefault();
+    const button = event.target.closest('.btn-add-to-cart'); // Asegurarse de obtener el botón si hay elementos hijos
+
+    if (!button) return;
+
+    const productId = button.dataset.productId;
+    const productName = button.dataset.productName;
+    const productPrice = parseFloat(button.dataset.productPrice);
+    const productImage = button.dataset.productImage;
+
+    if (!productId || !productName || isNaN(productPrice) || !productImage) {
+        console.error("Faltan datos del producto en el botón:", button.dataset);
+        alert("Error: No se pudo añadir el producto, faltan datos.");
+        return;
+    }
+
+    // Encontrar los inputs de cantidad y color asociados
+    // Asumimos que están dentro del mismo .product-card o un contenedor común cercano
+    const productCard = button.closest('.product-card');
+    let quantityInput, colorSelect;
+
+    if (productCard) {
+        quantityInput = productCard.querySelector(`.product-quantity[data-product-ref="${productId}"]`);
+        colorSelect = productCard.querySelector(`.product-color[data-product-ref="${productId}"]`);
+    } else {
+        // Fallback por si la estructura es diferente o el botón está fuera de un .product-card
+        // (por ejemplo, en las ofertas de index.html que aún no hemos adaptado)
+        quantityInput = document.getElementById(`quantity-${productId}`); // Asume ID único si no está en tarjeta
+        colorSelect = document.getElementById(`color-${productId}`);
+    }
+
+    let quantity = 1;
+    if (quantityInput) {
+        quantity = parseInt(quantityInput.value, 10);
+        if (isNaN(quantity) || quantity < 1) {
+            alert("Por favor, ingrese una cantidad válida.");
+            quantityInput.value = 1;
+            return;
+        }
+    } else {
+        // Si no hay input de cantidad (ej. ofertas en index.html), se asume 1.
+        // console.warn(`Input de cantidad no encontrado para producto ID: ${productId}. Usando cantidad 1.`);
+    }
+
+    let color = 'default';
+    if (colorSelect) {
+        color = colorSelect.value;
+    } else {
+        // Si no hay select de color, se asume 'default'.
+        // console.warn(`Select de color no encontrado para producto ID: ${productId}. Usando color por defecto.`);
+    }
+
+    const cartItemId = `${productId}_${color}`;
+    const existingItemIndex = shoppingCart.findIndex(item => item.cartId === cartItemId);
+
+    if (existingItemIndex > -1) {
+        shoppingCart[existingItemIndex].cantidad += quantity;
+    } else {
+        const newItem = {
+            cartId: cartItemId,
+            id: productId,
+            nombre: productName,
+            precio: productPrice,
+            imagen: productImage,
+            cantidad: quantity,
+            color: color
+        };
+        shoppingCart.push(newItem);
+    }
+
+    saveCart(shoppingCart);
+    // updateCartIconCount();
+    alert(`"${productName}" (Color: ${color}, Cant: ${quantity}) añadido al carrito.`);
+    // console.log("Carrito actualizado:", shoppingCart);
+}
+
+function attachAddToCartListeners() {
+    const addToCartButtons = document.querySelectorAll('.btn-add-to-cart');
+    addToCartButtons.forEach(button => {
+        // Remover listener anterior para evitar duplicados si se llama múltiples veces
+        button.removeEventListener('click', handleAddToCart);
+        button.addEventListener('click', handleAddToCart);
+    });
+}
+
+// --- Fin Lógica Base del Carrito de Compras ---
+
+// --- Lógica para Mostrar/Ocultar Modal del Carrito ---
+let activeCartModal = null; // Para rastrear el modal del carrito
+
+function cerrarCarritoModal() {
+    if (activeCartModal) {
+        activeCartModal.remove();
+        activeCartModal = null;
+    }
+}
+
+function abrirCarritoModal() {
+    if (activeCartModal) {
+        return;
+    }
+    if (activeModal) { // Si el modal de registro (u otro) está activo
+        activeModal.remove();
+        activeModal = null;
+    }
+
+    const modalDiv = document.createElement('div');
+    modalDiv.id = 'cartModal';
+    modalDiv.className = 'modal modal-visible';
+
+    fetch('carrito_modal_content.html')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.text();
+        })
+        .then(htmlContent => {
+            modalDiv.innerHTML = htmlContent;
+            document.body.appendChild(modalDiv);
+            activeCartModal = modalDiv;
+
+            renderCartItems(); // Se definirá en el siguiente paso
+
+            const closeButton = document.getElementById('closeCartModalContentButton');
+            if (closeButton) {
+                closeButton.addEventListener('click', cerrarCarritoModal);
+            }
+
+            modalDiv.addEventListener('click', (event) => {
+                if (event.target === modalDiv) {
+                    cerrarCarritoModal();
+                }
+            });
+
+            const checkoutButton = document.getElementById('checkoutButton');
+            if (checkoutButton) {
+                checkoutButton.addEventListener('click', () => {
+                    if(shoppingCart.length === 0){
+                        alert("Tu carrito está vacío.");
+                        return;
+                    }
+                    alert("Procediendo al pago (funcionalidad no implementada).");
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error al cargar el modal del carrito:', error);
+            alert('Hubo un error al cargar el carrito. Inténtelo más tarde.');
+            if (modalDiv.parentElement) {
+                modalDiv.remove();
+            }
+            activeCartModal = null;
+        });
+}
+
+const cartIcon = document.querySelector('.iconos a:nth-child(3)');
+if (cartIcon) {
+    cartIcon.addEventListener('click', (event) => {
+        event.preventDefault();
+        abrirCarritoModal();
+    });
+}
+
+// Placeholder para renderCartItems - se completará en el siguiente paso
+function renderCartItems() {
+    const cartItemsList = document.getElementById('cartItemsList');
+    const cartTotalAmountEl = document.getElementById('cartTotalAmountValue');
+    const emptyCartMessageEl = document.getElementById('emptyCartMessage');
+
+    if (!cartItemsList || !cartTotalAmountEl || !emptyCartMessageEl) {
+        console.error("Elementos del modal del carrito no encontrados. No se puede renderizar.");
+        return;
+    }
+
+    cartItemsList.innerHTML = '';
+    let totalGeneral = 0;
+
+    if (shoppingCart.length === 0) {
+        if(emptyCartMessageEl) emptyCartMessageEl.style.display = 'block';
+        // cartItemsList.innerHTML = '<p id="emptyCartMessage">Tu carrito está vacío.</p>'; // El p ya existe
+    } else {
+        if(emptyCartMessageEl) emptyCartMessageEl.style.display = 'none';
+        shoppingCart.forEach(item => {
+            const itemSubtotal = item.precio * item.cantidad;
+            totalGeneral += itemSubtotal;
+
+            const itemHTML = `
+                <div class="cart-item" data-cart-item-id="${item.cartId}">
+                    <img src="${item.imagen}" alt="${item.nombre}" class="cart-item-image">
+                    <div class="cart-item-details">
+                        <p class="cart-item-name">${item.nombre}</p>
+                        <p class="cart-item-price">$${item.precio.toFixed(2)}</p>
+                        <p class="cart-item-color">Color: ${item.color}</p>
+                        <p class="cart-item-quantity">Cantidad: ${item.cantidad}</p>
+                    </div>
+                    <p class="cart-item-subtotal">$${itemSubtotal.toFixed(2)}</p>
+                    <button class="cart-item-remove" data-cart-item-id="${item.cartId}">&times; Eliminar</button>
+                </div>
+            `;
+            cartItemsList.innerHTML += itemHTML;
+        });
+    }
+
+    if (cartTotalAmountEl) {
+        cartTotalAmountEl.textContent = `$${totalGeneral.toFixed(2)}`;
+    }
+
+    attachRemoveItemListeners();
+}
+
+function attachRemoveItemListeners() {
+    const removeButtons = document.querySelectorAll('.cart-item-remove');
+    removeButtons.forEach(button => {
+        button.removeEventListener('click', handleRemoveItem);
+        button.addEventListener('click', handleRemoveItem);
+    });
+}
+
+// La función handleRemoveItem se definirá en el siguiente paso del plan.
+function handleRemoveItem(event) {
+    const cartItemIdToRemove = event.target.dataset.cartItemId;
+
+    if (!cartItemIdToRemove) {
+        console.error("No se pudo identificar el item a eliminar del carrito.");
+        return;
+    }
+
+    // Filtrar el array shoppingCart para remover el item
+    shoppingCart = shoppingCart.filter(item => item.cartId !== cartItemIdToRemove);
+
+    saveCart(shoppingCart); // Guardar el carrito actualizado en localStorage
+    renderCartItems();      // Volver a renderizar el modal del carrito
+    // updateCartIconCount(); // Actualizar el contador del icono del carrito
+
+    // console.log(`Item ${cartItemIdToRemove} eliminado. Carrito:`, shoppingCart);
+}
+// --- Fin Lógica Modal Carrito ---
 
 
 const slider = document.getElementById("slider");
@@ -251,3 +536,7 @@ setInterval(function(){
 
 // Llamar a actualizarUIUsuario al cargar la página para reflejar el estado de sesión
 actualizarUIUsuario();
+// Llamar a initCart para cargar el carrito desde localStorage al iniciar
+initCart();
+// Adjuntar listeners a los botones "Añadir al Carrito" existentes en la página
+attachAddToCartListeners();

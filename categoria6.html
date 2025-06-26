@@ -55,10 +55,24 @@
             <h3>Zapatos Deportivos Flex</h3>
             <p class="price">$65.00</p>
             <div class="details">
-                <p>Cantidad: 15</p>
-                <p>Colores: Negro, Azul Marino</p>
+                <p>Disponibles: 15</p>
+                <p>Colores Base: Negro, Azul Marino</p>
             </div>
-            <a href="#" class="btn-add-to-cart">Añadir al Carrito</a>
+            <div class="product-options">
+                <div>
+                    <label for="quantity-zapatos">Cantidad:</label>
+                    <input type="number" id="quantity-zapatos" class="product-quantity" value="1" min="1" data-product-ref="zapatos">
+                </div>
+                <div>
+                    <label for="color-zapatos">Color:</label>
+                    <select id="color-zapatos" class="product-color" data-product-ref="zapatos">
+                        <option value="negro">Negro</option>
+                        <option value="blanco">Blanco</option>
+                        <option value="gris">Gris</option>
+                    </select>
+                </div>
+            </div>
+            <a href="#" class="btn-add-to-cart" data-product-id="zapatos_flex" data-product-name="Zapatos Deportivos Flex" data-product-price="65.00" data-product-image="img/oferta1.jpg">Añadir al Carrito</a>
         </div>
 
         <!-- Producto 2 -->
@@ -67,10 +81,23 @@
             <h3>Botas de Invierno Robustas</h3>
             <p class="price">$120.00</p>
             <div class="details">
-                <p>Cantidad: 10</p>
-                <p>Colores: Gris, Verde Olivo</p>
+                <p>Disponibles: 10</p>
+                <p>Colores Base: Gris, Verde Olivo</p>
             </div>
-            <a href="#" class="btn-add-to-cart">Añadir al Carrito</a>
+            <div class="product-options">
+                <div>
+                    <label for="quantity-botas">Cantidad:</label>
+                    <input type="number" id="quantity-botas" class="product-quantity" value="1" min="1" data-product-ref="botas">
+                </div>
+                <div>
+                    <label for="color-botas">Color:</label>
+                    <select id="color-botas" class="product-color" data-product-ref="botas">
+                        <option value="marron_oscuro">Marrón Oscuro</option>
+                        <option value="negro">Negro</option>
+                    </select>
+                </div>
+            </div>
+            <a href="#" class="btn-add-to-cart" data-product-id="botas_invierno" data-product-name="Botas de Invierno Robustas" data-product-price="120.00" data-product-image="img/oferta2.jpg">Añadir al Carrito</a>
         </div>
 
         <!-- Producto 3 -->
@@ -79,10 +106,24 @@
             <h3>Sandalias Verano Fresh</h3>
             <p class="price">$40.00</p>
             <div class="details">
-                <p>Cantidad: 7</p>
-                <p>Colores: Rojo, Blanco</p>
+                <p>Disponibles: 7</p>
+                <p>Colores Base: Rojo, Blanco</p>
             </div>
-            <a href="#" class="btn-add-to-cart">Añadir al Carrito</a>
+            <div class="product-options">
+                <div>
+                    <label for="quantity-sandalias">Cantidad:</label>
+                    <input type="number" id="quantity-sandalias" class="product-quantity" value="1" min="1" data-product-ref="sandalias">
+                </div>
+                <div>
+                    <label for="color-sandalias">Color:</label>
+                    <select id="color-sandalias" class="product-color" data-product-ref="sandalias">
+                        <option value="azul_claro">Azul Claro</option>
+                        <option value="rosa">Rosa</option>
+                        <option value="beige">Beige</option>
+                    </select>
+                </div>
+            </div>
+            <a href="#" class="btn-add-to-cart" data-product-id="sandalias_verano" data-product-name="Sandalias Verano Fresh" data-product-price="40.00" data-product-image="img/chaqueta1.jpeg">Añadir al Carrito</a>
         </div>
     </main>
 

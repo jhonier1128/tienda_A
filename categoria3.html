@@ -55,10 +55,23 @@
             <h3>Artículo Kappa</h3>
             <p class="price">$39.99</p>
             <div class="details">
-                <p>Cantidad: 15</p>
-                <p>Colores: Negro, Azul Marino</p>
+                <p>Disponibles: 15</p>
+                <p>Colores Base: Negro, Azul Marino</p>
             </div>
-            <a href="#" class="btn-add-to-cart">Añadir al Carrito</a>
+            <div class="product-options">
+                <div>
+                    <label for="quantity-kappa">Cantidad:</label>
+                    <input type="number" id="quantity-kappa" class="product-quantity" value="1" min="1" data-product-ref="kappa">
+                </div>
+                <div>
+                    <label for="color-kappa">Color:</label>
+                    <select id="color-kappa" class="product-color" data-product-ref="kappa">
+                        <option value="negro">Negro</option>
+                        <option value="azul">Azul</option>
+                    </select>
+                </div>
+            </div>
+            <a href="#" class="btn-add-to-cart" data-product-id="kappa" data-product-name="Artículo Kappa" data-product-price="39.99" data-product-image="img/chaqueta3.jpeg">Añadir al Carrito</a>
         </div>
 
         <!-- Producto 2 -->
@@ -67,10 +80,23 @@
             <h3>Artículo Lambda</h3>
             <p class="price">$49.99</p>
             <div class="details">
-                <p>Cantidad: 10</p>
-                <p>Colores: Gris, Verde Olivo</p>
+                <p>Disponibles: 10</p>
+                <p>Colores Base: Gris, Verde Olivo</p>
             </div>
-            <a href="#" class="btn-add-to-cart">Añadir al Carrito</a>
+            <div class="product-options">
+                <div>
+                    <label for="quantity-lambda">Cantidad:</label>
+                    <input type="number" id="quantity-lambda" class="product-quantity" value="1" min="1" data-product-ref="lambda">
+                </div>
+                <div>
+                    <label for="color-lambda">Color:</label>
+                    <select id="color-lambda" class="product-color" data-product-ref="lambda">
+                        <option value="gris">Gris</option>
+                        <option value="verde">Verde</option>
+                    </select>
+                </div>
+            </div>
+            <a href="#" class="btn-add-to-cart" data-product-id="lambda" data-product-name="Artículo Lambda" data-product-price="49.99" data-product-image="img/chaqueta1.jpeg">Añadir al Carrito</a>
         </div>
 
         <!-- Producto 3 -->
@@ -79,10 +105,24 @@
             <h3>Artículo Omega</h3>
             <p class="price">$59.99</p>
             <div class="details">
-                <p>Cantidad: 7</p>
-                <p>Colores: Rojo, Blanco</p>
+                <p>Disponibles: 7</p>
+                <p>Colores Base: Rojo, Blanco</p>
             </div>
-            <a href="#" class="btn-add-to-cart">Añadir al Carrito</a>
+            <div class="product-options">
+                <div>
+                    <label for="quantity-omega">Cantidad:</label>
+                    <input type="number" id="quantity-omega" class="product-quantity" value="1" min="1" data-product-ref="omega">
+                </div>
+                <div>
+                    <label for="color-omega">Color:</label>
+                    <select id="color-omega" class="product-color" data-product-ref="omega">
+                        <option value="rojo">Rojo</option>
+                        <option value="blanco">Blanco</option>
+                        <option value="negro">Negro</option>
+                    </select>
+                </div>
+            </div>
+            <a href="#" class="btn-add-to-cart" data-product-id="omega" data-product-name="Artículo Omega" data-product-price="59.99" data-product-image="img/chaqueta2.jpeg">Añadir al Carrito</a>
         </div>
     </main>
 
