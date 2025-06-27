@@ -1,16 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-/*
 @font-face {
   font-family: 'Perfect Futures';
-  src: url(/perfect_futures/Perfect\ Futures\ Italic.otf);
-  font-weight: bold;
-  font-style: bold;
+  src: url('Perfect Futures Italic.otf') format('opentype');
+  font-weight: normal; /* Ajustar si el peso de la fuente es diferente */
+  font-style: italic;   /* Asumiendo que el archivo es una variante itálica */
 }
-*/
 
 :root {
   --background-grey: #F5F5F5;
+}
+
+/* Aplicar Perfect Futures a los elementos principales de título/énfasis */
+.slider,
+.nav-menu-desktop ul,
+.categorias-titulo,
+.info-contacto h2,
+.oferta-descripcion,
+.oferta-nombre,
+.page-title,
+.product-card h3,
+.modal-content h2,
+.modal-content h4,
+h1,
+h2 /* Aplicación más general a h1 y h2 */
+ {
+  font-family: "Perfect Futures", "Bebas Neue", sans-serif;
 }
 
 html {
@@ -28,11 +43,8 @@ html {
 body, .btn-pedir{
     font-family: "Bebas Neue", sans-serif;
 }
-.slider, .nav-menu-desktop ul, .categorias-titulo, .info-contacto h2, .oferta-descripcion {
-  font-family: "Perfect Futures";
-
-}
-
+/* La regla para .slider, .nav-menu-desktop ul, etc. se eliminará
+   y se reemplazará por una más completa más abajo. */
 
 .slider-container {
   width: 100%;
@@ -640,7 +652,7 @@ hr {
     font-size: 2.5rem;
     color: #cc1f1f;
     margin-top: 20px;
-    font-family: "Perfect Futures", sans-serif; /* Usando la fuente del proyecto */
+    /* font-family será aplicado por la regla general de Perfect Futures más abajo */
 }
 .simple-footer {
     text-align: center;
