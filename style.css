@@ -505,9 +505,9 @@ hr {
     margin-top: 15px;
   }
 
-  .redes-menu img {
-    width: 24px;
-    height: 24px;
+  .redes-menu img { /* Unificado a 30px y se elimina la regla duplicada más abajo */
+    width: 30px;
+    height: 30px;
   }
 
   .usuario-mobile img {
@@ -515,16 +515,13 @@ hr {
     height: 30px;
   }
 
-  .redes-menu {
+  .redes-menu { /* Unificado a margin-top: 20px y se elimina la regla duplicada más abajo */
     display: flex;
     gap: 15px;
     margin-top: 20px;
   }
 
-  .redes-menu img {
-    width: 30px;
-    height: 30px;
-  }
+  /* La regla duplicada para .redes-menu img y .redes-menu que estaba aquí abajo se elimina */
 
   .slider-container {
     font-size: 0.85rem;
