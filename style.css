@@ -868,6 +868,12 @@ hr {
     box-sizing: border-box; /* Para que padding no afecte el width:100% */
 }
 
+/* Estilo específico para el título del modal del carrito */
+#cartModal .modal-content h2 {
+    color: #cc1f1f; /* Color rojo principal del sitio */
+    margin-bottom: 20px; /* Espacio debajo del título */
+}
+
 /* Estilos para el Modal de Medios de Pago */
 .order-summary-payment {
     margin-bottom: 20px;
@@ -1036,4 +1042,21 @@ hr {
 }
 #cancelMediosPagoButton:hover {
     background-color: #888;
+}
+
+/* Estilos para el botón Vaciar Carrito */
+#emptyCartButton {
+    background-color: #d9534f; /* Rojo para acciones destructivas */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    margin: 15px auto; /* Centrado y con margen arriba/abajo */
+    min-width: 150px;
+}
+
+#emptyCartButton:hover {
+    background-color: #c9302c; /* Rojo más oscuro al pasar el mouse */
 }
