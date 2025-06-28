@@ -720,20 +720,25 @@ hr {
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Permitir scroll si el contenido es muy largo */
+    /* overflow: auto; QUITADO - el scroll lo manejará .modal-content */
     background-color: rgba(0,0,0,0.8); /* Fondo negro semitransparente - MÁS OSCURO */
+    /* Para centrar con Flexbox (display:flex se aplica con .modal-visible): */
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-content {
     background-color: #fefefe;
-    margin: 10% auto; /* 10% desde arriba y centrado horizontalmente */
+    /* margin: 10% auto; QUITADO - El centrado ahora es por Flexbox en .modal */
     padding: 25px;
     border: 1px solid #888;
-    width: 80%; /* Podría ser más específico, ej. 400px */
-    max-width: 500px; /* Máximo ancho */
+    width: 80%;
+    max-width: 500px; /* O un valor más adecuado si es necesario */
     border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     position: relative;
+    max-height: 60vh; /* Límite de altura al 60% del viewport */
+    overflow-y: auto; /* Scroll interno si el contenido excede max-height */
 }
 
 .close-button {
@@ -752,7 +757,7 @@ hr {
 }
 
 .modal-visible {
-    display: block !important; /* Para asegurar que se muestre */
+    display: flex !important; /* Para activar Flexbox en .modal y centrar el contenido */
 }
 
 /* Estilos para el Modal del Carrito (complementan .modal y .modal-content) */
