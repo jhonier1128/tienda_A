@@ -732,13 +732,13 @@ hr {
     /* margin: 10% auto; QUITADO - El centrado ahora es por Flexbox en .modal */
     padding: 25px;
     border: 1px solid #888;
-    width: 50vw;     /* 50% del ancho del viewport */
-    max-width: 600px;  /* Límite superior para pantallas muy anchas */
-    min-width: 300px;  /* Límite inferior para pantallas pequeñas */
+    width: 80%;       /* Volviendo a 80% */
+    max-width: 600px;  /* Mantenemos este max-width o ajustamos si es necesario */
+    /* min-width: 300px; QUITADO */
     border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     position: relative;
-    /* max-height: 60vh; QUITADO */
+    max-height: 80vh; /* Nueva altura máxima, más generosa */
     overflow-y: auto; /* Scroll interno si el contenido vertical es más alto */
 }
 
