@@ -845,3 +845,173 @@ hr {
     width: 100%;
     box-sizing: border-box; /* Para que padding no afecte el width:100% */
 }
+
+/* Estilos para el Modal de Medios de Pago */
+.order-summary-payment {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.order-summary-payment h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.payment-order-items-list {
+    max-height: 150px; /* Opcional: scroll si hay muchos items */
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.payment-order-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+    padding: 5px 0;
+    border-bottom: 1px dotted #eee;
+}
+.payment-order-item:last-child {
+    border-bottom: none;
+}
+
+.payment-order-item-image {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    margin-right: 10px;
+    border-radius: 3px;
+}
+
+.payment-order-item-details {
+    flex-grow: 1;
+}
+.payment-order-item-name {
+    margin: 0;
+    color: #555;
+}
+.payment-order-item-price {
+    margin-left: 10px;
+    font-weight: bold;
+    color: #333;
+    min-width: 60px;
+    text-align: right;
+}
+
+.order-summary-payment p {
+    margin: 5px 0;
+    font-size: 0.95em;
+}
+.order-summary-payment p strong {
+    color: #333;
+}
+.payment-total-final {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    color: #cc1f1f; /* Color principal */
+    font-size: 1.1em;
+}
+.payment-total-final span {
+    font-size: 1.2em;
+}
+
+
+/* Formulario de Envío */
+#datosEnvioForm h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+#datosEnvioForm div {
+    margin-bottom: 12px;
+}
+#datosEnvioForm label {
+    display: block;
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 3px;
+}
+#datosEnvioForm input[type="text"],
+#datosEnvioForm input[type="tel"],
+#datosEnvioForm textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.95em;
+}
+#datosEnvioForm textarea {
+    resize: vertical;
+}
+
+/* Sección Opciones de Pago Anticipado */
+.payment-options-section h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+.btn-secondary-action { /* Estilo para el botón PSE */
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease;
+}
+.btn-secondary-action:hover {
+    background-color: #e0e0e0;
+}
+
+.payment-details-anticipado {
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+.payment-details-anticipado p strong {
+    color: #333;
+}
+
+
+/* Opción Envío Prioritario */
+.priority-shipping-option {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
+.priority-shipping-option label {
+    display: flex;
+    align-items: center;
+    font-size: 0.95em;
+    cursor: pointer;
+}
+.priority-shipping-option input[type="checkbox"] {
+    margin-right: 8px;
+    transform: scale(1.1); /* Hacer el checkbox un poco más grande */
+}
+.priority-shipping-option .priority-details {
+    font-size: 0.8em;
+    color: #555;
+    margin-left: 23px; /* Alineado con el texto después del checkbox */
+    margin-top: 3px;
+}
+
+#btnHacerPedidoContraentrega {
+    /* Estilos ya definidos por .btn-pedir, pero podemos ajustar si es necesario */
+    padding: 12px 20px; /* Asegurar buen padding */
+}
+#cancelMediosPagoButton {
+    /* Estilos ya definidos por .btn-categoria, pero podemos ajustar */
+    background-color: #aaa;
+    color: #fff;
+    border-color: #888;
+}
+#cancelMediosPagoButton:hover {
+    background-color: #888;
+}

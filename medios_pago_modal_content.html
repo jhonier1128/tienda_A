@@ -1,26 +1,88 @@
 <span class="close-button" id="closeMediosPagoModalButton">&times;</span>
-<h2>Confirmar Pedido y Medios de Pago</h2>
+<h2>Pago Contraentrega</h2>
 
-<div class="payment-info">
-    <h4>Transferencia Bancaria</h4>
-    <p><strong>Banco:</strong> [TU BANCO AQUÍ]</p>
-    <p><strong>Tipo de Cuenta:</strong> [AHORROS/CORRIENTE]</p>
-    <p><strong>Número de Cuenta:</strong> [TU NÚMERO DE CUENTA]</p>
-    <p><strong>Titular:</strong> [NOMBRE DEL TITULAR]</p>
-    <p><strong>NIT/CC:</strong> [TU IDENTIFICACIÓN]</p>
-</div>
-
-<div class="qr-code-container">
-    <h4>Código QR para Pago</h4>
-    <!-- Si me das una URL, la pondré aquí. Sino, un placeholder -->
-    <img src="img/placeholder_qr.png" alt="Código QR para pago" style="max-width: 200px; display: block; margin: 10px auto;">
-    <p style="text-align:center; font-size:0.9em;">Escanea el código QR con tu app de pagos.</p>
+<div class="order-summary-payment">
+    <h4>Resumen de tu Pedido:</h4>
+    <div id="paymentOrderItems" class="payment-order-items-list">
+        <!-- Items del carrito se insertarán aquí por JS -->
+    </div>
+    <p><strong>Subtotal Productos:</strong> <span id="paymentSubtotalProducts">$0.00</span></p>
+    <p><strong>Valor del Envío:</strong> <span id="paymentShippingCost">$10,000</span> COP</p>
+    <p><strong>Envío Prioritario:</strong> <span id="paymentPriorityShippingCost">$0</span> COP</p>
+    <h4 class="payment-total-final"><strong>Total a Pagar (Contraentrega): <span id="paymentTotalFinalContraentrega">$10,000.00</span> COP</strong></h4>
 </div>
 
 <hr>
-<p style="text-align:center; margin: 15px 0;">
-    Después de realizar el pago, por favor envía el comprobante junto con tu pedido por WhatsApp.
-</p>
 
-<button id="sendOrderWhatsAppButton" class="btn-pedir" style="width:100%; background-color: #25D366; margin-bottom:10px;">Enviar Pedido por WhatsApp y Confirmar Pago</button>
-<button id="cancelMediosPagoButton" class="btn-categoria" style="width:100%; background-color:#777;">Cancelar / Volver al Carrito</button>
+<form id="datosEnvioForm">
+    <h4>Ingresa tus datos para el envío:</h4>
+    <div>
+        <label for="envioNombre">Nombre Completo:</label>
+        <input type="text" id="envioNombre" name="envioNombre" required>
+    </div>
+    <div>
+        <label for="envioTelefono">Teléfono de Contacto:</label>
+        <input type="tel" id="envioTelefono" name="envioTelefono" required>
+    </div>
+    <div>
+        <label for="envioDepartamento">Departamento:</label>
+        <input type="text" id="envioDepartamento" name="envioDepartamento" required>
+    </div>
+    <div>
+        <label for="envioCiudad">Ciudad/Municipio:</label>
+        <input type="text" id="envioCiudad" name="envioCiudad" required>
+    </div>
+    <div>
+        <label for="envioDireccion">Dirección Completa:</label>
+        <input type="text" id="envioDireccion" name="envioDireccion" required>
+    </div>
+    <div>
+        <label for="envioBarrio">Barrio:</label>
+        <input type="text" id="envioBarrio" name="envioBarrio">
+    </div>
+    <div>
+        <label for="envioReferencia">Punto de Referencia / Observaciones:</label>
+        <textarea id="envioReferencia" name="envioReferencia" rows="2"></textarea>
+    </div>
+    <div>
+        <label for="envioTalla">Confirmar Talla(s) (si aplica):</label>
+        <input type="text" id="envioTalla" name="envioTalla">
+    </div>
+</form>
+
+<hr>
+
+<div class="payment-options-section">
+    <h4>¿Prefieres Pago Anticipado?</h4>
+    <button id="btnPagoAnticipado" class="btn-secondary-action" style="width:100%; margin-bottom: 5px;">Pagar con PSE / Tarjeta de Crédito</button>
+    <p class="priority-shipping-note" style="font-size:0.8em; text-align:center;">(Tu envío será prioritario sin ningún costo adicional si eliges pago anticipado)</p>
+
+    <div class="payment-details-anticipado" style="display:none; margin-top:15px; padding:10px; border:1px dashed #ccc; border-radius:5px;">
+        <p><strong>Banco:</strong> [TU BANCO AQUÍ]</p>
+        <p><strong>Tipo de Cuenta:</strong> Ahorros</p>
+        <p><strong>Número de Cuenta:</strong> 238000042925633</p>
+        <p><strong>Titular:</strong> [NOMBRE TITULAR AQUÍ]</p>
+        <p><strong>NIT/CC:</strong> [NIT/CC TITULAR AQUÍ]</p>
+        <div class="qr-code-container" style="margin-top:10px;">
+            <p style="text-align:center; margin-bottom:5px;"><strong>Paga con QR:</strong></p>
+            <img src="img/qr_code_placeholder.png" alt="Código QR para pago" style="max-width: 150px; display: block; margin: 5px auto; border:1px solid #eee;">
+             <p style="text-align:center; font-size:0.8em;">(Reemplaza esta imagen con tu QR en la carpeta img/)</p>
+        </div>
+        <p style="text-align:center; font-size:0.9em; margin-top:10px;">Envía el comprobante junto con tu pedido por WhatsApp.</p>
+    </div>
+</div>
+
+<hr>
+
+<div class="priority-shipping-option">
+    <input type="checkbox" id="chkEnvioPrioritario" name="chkEnvioPrioritario" value="5000">
+    <label for="chkEnvioPrioritario" style="display:flex; align-items:center; cursor:pointer;">
+        <span style="font-weight:bold; margin-left:5px;">Sí, quiero envío prioritario por solo $5,000 COP adicionales.</span>
+    </label>
+    <p class="priority-details" style="font-size:0.8em; margin-left:25px; color:#555;">Esta selección hace que tu pedido sea puesto al inicio de la lista de despachos, garantizando una entrega rápida y eficiente. ¡Disfruta de esta prioridad!</p>
+</div>
+
+<button id="btnHacerPedidoContraentrega" class="btn-pedir" style="width:100%; margin-top:20px; font-size: 1.1rem; padding: 12px;">
+    Hacer Pedido Contraentrega: <span id="totalContraentregaBoton">$10,000.00</span> COP
+</button>
+<button id="cancelMediosPagoButton" class="btn-categoria" style="width:100%; background-color:#aaa; color:#fff; margin-top:10px; border-color:#888;">Cancelar</button>
