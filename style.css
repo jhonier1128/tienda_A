@@ -730,16 +730,20 @@ hr {
 .modal-content {
     background-color: #fefefe;
     /* margin: 10% auto; QUITADO - El centrado ahora es por Flexbox en .modal */
-    padding: 25px;
-    border: 1px solid #888;
-    width: 80%;       /* Volviendo a 80% */
-    max-width: 600px;  /* Mantenemos este max-width o ajustamos si es necesario */
-    /* min-width: 300px; QUITADO */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    padding: 20px; /* Ajustar padding si es necesario */
+    border: none;       /* Sin borde para un look de página completa */
+    width: 100%;    /* Ocupar todo el ancho del padre (.modal) */
+    height: 100%;   /* Ocupar toda la altura del padre (.modal) */
+    max-width: none;  /* Anular max-width anterior */
+    border-radius: 0; /* Sin bordes redondeados para llenar la pantalla */
+    box-shadow: none;   /* Sin sombra para una apariencia de página completa */
     position: relative;
-    max-height: 80vh; /* Nueva altura máxima, más generosa */
-    overflow-y: auto; /* Scroll interno si el contenido vertical es más alto */
+    overflow-y: auto;   /* Scroll si el contenido excede la altura */
+    text-align: center; /* Centrar texto de los hijos directos */
+    box-sizing: border-box; /* Padding y border no incrementan el tamaño total */
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; // Descomentar si los bloques hijos deben centrarse horizontalmente */
 }
 
 .close-button {
@@ -764,22 +768,29 @@ hr {
 /* Estilos para el Modal del Carrito (complementan .modal y .modal-content) */
 
 #cartItemsList {
-    max-height: 300px; /* Altura máxima antes de scroll */
-    overflow-y: auto; /* Scroll vertical si hay muchos items */
+    max-height: none;
     margin-bottom: 15px;
-    padding-right: 10px; /* Espacio para la barra de scroll si aparece */
 }
 
 .cart-item {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: row;    /* Elementos en fila */
+    align-items: center;    /* Centrados verticalmente en la fila */
+    justify-content: space-between; /* Espacio entre grupo de info y botón eliminar */
     padding: 10px 0;
     border-bottom: 1px solid #eee;
+    text-align: left;      /* El texto dentro de los detalles se alineará a la izq. */
 }
 
 .cart-item:last-child {
     border-bottom: none;
+}
+
+/* Nuevo grupo para la info del producto, para que el botón de eliminar quede al final */
+.cart-item-content-group {
+    display: flex;
+    align-items: center;
+    flex-grow: 1; /* Ocupa el espacio, empujando el botón de eliminar a la derecha */
 }
 
 .cart-item-image {
@@ -787,12 +798,15 @@ hr {
     height: 60px;
     object-fit: cover;
     border-radius: 4px;
-    margin-right: 15px;
+    margin-right: 15px; /* Espacio entre imagen y detalles */
+    margin-bottom: 0;   /* Ya no se apila la imagen */
 }
 
 .cart-item-details {
-    flex-grow: 1;
+    flex-grow: 1; /* Detalles ocupan espacio disponible dentro del content-group */
     font-size: 0.9rem;
+    text-align: left; /* Asegurar alineación izquierda para los párrafos internos */
+    margin-bottom: 0;
 }
 
 .cart-item-name {
@@ -810,20 +824,22 @@ hr {
 
 .cart-item-subtotal {
     font-weight: bold;
-    margin-left: 15px; /* Espacio antes del subtotal */
-    min-width: 70px; /* Para alinear un poco los subtotales */
-    text-align: right;
+    margin-left: 15px; /* Espacio entre detalles y subtotal */
+    min-width: 70px;
+    text-align: right; /* Subtotal alineado a la derecha (dentro del content-group) */
+    margin-bottom: 0;
 }
 
 .cart-item-remove {
-    background-color: #ff6b6b; /* Un rojo suave para eliminar */
+    background-color: #ff6b6b;
     color: white;
     border: none;
     padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.8rem;
-    margin-left: 15px;
+    margin-left: 15px; /* Espacio entre el content-group y el botón */
+    margin-top: 0;
 }
 
 .cart-item-remove:hover {

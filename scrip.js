@@ -151,8 +151,12 @@ function abrirCarritoModal() {
 
             const checkoutButton = document.getElementById('checkoutButton');
             if (checkoutButton) {
-                // El listener ahora llama a handleCheckout, que a su vez llamará a abrirMediosPagoModal
                 checkoutButton.addEventListener('click', handleCheckout);
+            }
+
+            const emptyCartBtn = document.getElementById('emptyCartButton');
+            if (emptyCartBtn) {
+                emptyCartBtn.addEventListener('click', vaciarCarrito);
             }
         })
         .catch(error => {
@@ -183,7 +187,7 @@ function renderCartItems() {
         return;
     }
 
-    cartItemsList.innerHTML = ''; // Limpiar items anteriores
+    cartItemsList.innerHTML = '';
     let totalGeneral = 0;
 
     if (shoppingCart.length === 0) {
@@ -199,18 +203,20 @@ function renderCartItems() {
             const itemDiv = document.createElement('div');
             itemDiv.className = 'cart-item';
             itemDiv.dataset.cartItemId = item.cartId;
+            // HTML MODIFICADO para usar cart-item-content-group
             itemDiv.innerHTML = `
-                <img src="${item.imagen}" alt="${item.nombre}" class="cart-item-image">
-                <div class="cart-item-details">
-                    <p class="cart-item-name">${item.nombre}</p>
-                    <p class="cart-item-price">$${item.precio.toFixed(2)}</p>
-                    <p class="cart-item-color">Color: ${item.color}</p>
-                    <p class="cart-item-quantity">Cantidad: ${item.cantidad}</p>
+                <div class="cart-item-content-group">
+                    <img src="${item.imagen}" alt="${item.nombre}" class="cart-item-image">
+                    <div class="cart-item-details">
+                        <p class="cart-item-name">${item.nombre}</p>
+                        <p class="cart-item-price">Precio Unit: $${item.precio.toFixed(2)}</p>
+                        <p class="cart-item-color">Color: ${item.color}</p>
+                        <p class="cart-item-quantity">Cantidad: ${item.cantidad}</p>
+                    </div>
+                    <p class="cart-item-subtotal">$${itemSubtotal.toFixed(2)}</p>
                 </div>
-                <p class="cart-item-subtotal">$${itemSubtotal.toFixed(2)}</p>
                 <button class="cart-item-remove" data-cart-item-id="${item.cartId}">&times; Eliminar</button>
             `;
-            // console.log("Renderizando item:", item.nombre);
             cartItemsList.appendChild(itemDiv);
         });
     }
@@ -248,6 +254,18 @@ function handleRemoveItem(event) {
     console.log("handleRemoveItem - Llamando a renderCartItems...");
     renderCartItems();
 }
+
+function vaciarCarrito() {
+    if (shoppingCart.length === 0) {
+        return;
+    }
+    if (confirm("¿Estás seguro de que quieres vaciar todo el carrito?")) {
+        shoppingCart = [];
+        saveCart(shoppingCart);
+        renderCartItems();
+        alert("El carrito ha sido vaciado.");
+    }
+}
 // --- Fin Lógica Modal Carrito ---
 
 // --- Lógica para Modal de Medios de Pago ---
@@ -255,17 +273,16 @@ let activeMediosPagoModal = null;
 const COSTO_ENVIO_FIJO = 10000;
 const COSTO_ENVIO_PRIORITARIO = 5000;
 
-// Placeholders para las nuevas funciones
 function renderizarResumenPedidoEnModalPago() {
     const orderItemsContainer = document.getElementById('paymentOrderItems');
     const subtotalProductsEl = document.getElementById('paymentSubtotalProducts');
 
     if (!orderItemsContainer || !subtotalProductsEl) {
         console.error("Elementos para el resumen del pedido en modal de pago no encontrados.");
-        return 0; // Devuelve 0 si no se pueden renderizar los items
+        return 0;
     }
 
-    orderItemsContainer.innerHTML = ''; // Limpiar items anteriores
+    orderItemsContainer.innerHTML = '';
     let subtotalProductos = 0;
 
     if (shoppingCart.length === 0) {
@@ -304,16 +321,10 @@ function actualizarTotalFinal() {
     }
 
     let subtotalProductos = 0;
-    shoppingCart.forEach(item => { // Recalcular subtotal basado en el carrito actual
+    shoppingCart.forEach(item => {
         subtotalProductos += item.precio * item.cantidad;
     });
-    // paymentSubtotalProducts ya es actualizado por renderizarResumenPedidoEnModalPago, pero lo recalculamos
-    // para que esta función sea independiente si se llama solo por el checkbox.
-    // O podríamos leer el valor del DOM, pero recalcular es más seguro.
     subtotalProductosEl.textContent = `$${subtotalProductos.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
-
-
-    // shippingCostEl.textContent = `$${COSTO_ENVIO_FIJO.toLocaleString('es-CO')} COP`; // Ya está en el HTML y es fijo
 
     let costoPrioritario = 0;
     if (chkEnvioPrioritario && chkEnvioPrioritario.checked) {
@@ -322,10 +333,8 @@ function actualizarTotalFinal() {
     priorityShippingCostEl.textContent = `$${costoPrioritario.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} COP`;
 
     const totalFinal = subtotalProductos + COSTO_ENVIO_FIJO + costoPrioritario;
-
     const formatoCOP = { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 };
 
-    // Asegurarse que los elementos existen antes de setear textContent
     if (totalFinalContraentregaEl) {
       totalFinalContraentregaEl.textContent = `${totalFinal.toLocaleString('es-CO', formatoCOP)} COP`;
     }
@@ -335,13 +344,11 @@ function actualizarTotalFinal() {
 }
 
 function validarYEnviarPedidoContraentrega() {
-    // Validar formulario de envío
     const envioNombre = document.getElementById('envioNombre').value.trim();
     const envioTelefono = document.getElementById('envioTelefono').value.trim();
     const envioDepartamento = document.getElementById('envioDepartamento').value.trim();
     const envioCiudad = document.getElementById('envioCiudad').value.trim();
     const envioDireccion = document.getElementById('envioDireccion').value.trim();
-    // Campos opcionales
     const envioBarrio = document.getElementById('envioBarrio').value.trim();
     const envioReferencia = document.getElementById('envioReferencia').value.trim();
     const envioTalla = document.getElementById('envioTalla').value.trim();
@@ -350,16 +357,13 @@ function validarYEnviarPedidoContraentrega() {
         alert("Por favor, completa todos los campos de envío requeridos (Nombre, Teléfono, Departamento, Ciudad, Dirección).");
         return;
     }
-
     if (shoppingCart.length === 0) {
         alert("Tu carrito está vacío. Añade productos antes de enviar el pedido.");
         return;
     }
 
-    // Recalcular subtotal y costos para el mensaje (para asegurar consistencia)
     let subtotalProductos = 0;
     shoppingCart.forEach(item => { subtotalProductos += item.precio * item.cantidad; });
-
     const chkEnvioPrioritario = document.getElementById('chkEnvioPrioritario');
     let costoPrioritario = 0;
     let esEnvioPrioritario = false;
@@ -368,9 +372,7 @@ function validarYEnviarPedidoContraentrega() {
         esEnvioPrioritario = true;
     }
     const totalPedido = subtotalProductos + COSTO_ENVIO_FIJO + costoPrioritario;
-
-    // Formatear mensaje para WhatsApp
-    const TU_NUMERO_WHATSAPP = "573127750773"; // REEMPLAZAR con tu número real
+    const TU_NUMERO_WHATSAPP = "573127750773";
 
     let mensajePedido = "🛍️ *NUEVO PEDIDO CONTRAENTREGA* 🛍️\\n\\n";
     mensajePedido += "--- *Productos* ---\\n";
@@ -402,20 +404,12 @@ function validarYEnviarPedidoContraentrega() {
 
     const encodedMensaje = encodeURIComponent(mensajePedido);
     const whatsappURL = `https://api.whatsapp.com/send?phone=${TU_NUMERO_WHATSAPP}&text=${encodedMensaje}`;
-
     window.open(whatsappURL, '_blank');
-
     alert("Serás redirigido a WhatsApp para enviar los detalles de tu pedido contraentrega. Tu carrito se vaciará.");
-
     shoppingCart = [];
     saveCart(shoppingCart);
-
     cerrarMediosPagoModal();
-    // Si se reabre el carrito después, debería estar vacío.
-    // Si el modal del carrito estuviera aún visible por alguna razón (no debería),
-    // se podría llamar a renderCartItems() para actualizarlo, pero cerrarMediosPagoModal() es suficiente.
 }
-
 
 function cerrarMediosPagoModal() {
     if (activeMediosPagoModal) {
@@ -424,114 +418,12 @@ function cerrarMediosPagoModal() {
     }
 }
 
-function abrirMediosPagoModal() {
-    if (activeMediosPagoModal) return;
-
-    cerrarCarritoModal();
-
-    const modalDiv = document.createElement('div');
-    modalDiv.id = 'mediosPagoModal';
-    modalDiv.className = 'modal modal-visible';
-
-    fetch('medios_pago_modal_content.html')
-        .then(response => {
-            if (!response.ok) throw new Error('Network error al cargar medios_pago_modal_content.html');
-            return response.text();
-        })
-        .then(htmlContent => {
-            modalDiv.innerHTML = htmlContent;
-            document.body.appendChild(modalDiv);
-            activeMediosPagoModal = modalDiv;
-
-            // Poblar resumen y calcular totales iniciales
-            const subtotalProductos = renderizarResumenPedidoEnModalPago(); // Implementar esta función
-            // El siguiente getElementById será null si el contenido no tiene paymentShippingCost
-            const shippingCostEl = document.getElementById('paymentShippingCost');
-            if(shippingCostEl) shippingCostEl.textContent = `$${COSTO_ENVIO_FIJO.toLocaleString('es-CO')} COP`;
-
-            actualizarTotalFinal(); // Llamada inicial para calcular total con envío fijo y opcional prioritario
-
-            // Listeners para botones del modal de medios de pago
-            const closeBtn = document.getElementById('closeMediosPagoModalButton');
-            if (closeBtn) closeBtn.addEventListener('click', cerrarMediosPagoModal);
-
-            const cancelBtn = document.getElementById('cancelMediosPagoButton');
-            if (cancelBtn) cancelBtn.addEventListener('click', cerrarMediosPagoModal);
-
-            const chkPrioritario = document.getElementById('chkEnvioPrioritario');
-            if (chkPrioritario) chkPrioritario.addEventListener('change', actualizarTotalFinal);
-
-            const btnHacerPedido = document.getElementById('btnHacerPedidoContraentrega');
-            if (btnHacerPedido) btnHacerPedido.addEventListener('click', validarYEnviarPedidoContraentrega);
-
-            const btnPagoAnticipado = document.getElementById('btnPagoAnticipado');
-            const detallesAnticipado = document.querySelector('.payment-details-anticipado');
-            if (btnPagoAnticipado && detallesAnticipado) {
-                btnPagoAnticipado.addEventListener('click', () => {
-                    detallesAnticipado.style.display = detallesAnticipado.style.display === 'none' ? 'block' : 'none';
-                });
-            }
-
-            modalDiv.addEventListener('click', (event) => {
-                if (event.target === modalDiv) cerrarMediosPagoModal();
-            });
-        })
-        .catch(error => {
-            console.error('Error al cargar el modal de medios de pago:', error);
-            alert('Hubo un error al mostrar los medios de pago.');
-            if (modalDiv.parentElement) modalDiv.remove();
-            activeMediosPagoModal = null;
-        });
-}
-
-// La función enviarPedidoWhatsApp se reemplazará/renombrará a validarYEnviarPedidoContraentrega
-// y se moverá o modificará su contenido. Por ahora, la dejo comentada o la eliminaremos en el siguiente paso.
-// function enviarPedidoWhatsApp() { ... }
-
-
-// Handler para el botón de checkout del carrito
-function handleCheckout() {
-    let totalGeneralPedido = 0;
-
-    shoppingCart.forEach(item => {
-        const subtotalItem = item.precio * item.cantidad;
-        mensajePedido += `Producto: ${item.nombre}\\n`;
-        mensajePedido += `Color: ${item.color}\\n`;
-        mensajePedido += `Cantidad: ${item.cantidad}\\n`;
-        mensajePedido += `Precio Unitario: $${item.precio.toFixed(2)}\\n`;
-        mensajePedido += `Subtotal: $${subtotalItem.toFixed(2)}\\n\\n`;
-        totalGeneralPedido += subtotalItem;
-    });
-
-    mensajePedido += `-----------------------------------\\n`;
-    mensajePedido += `TOTAL DEL PEDIDO: $${totalGeneralPedido.toFixed(2)}\\n\\n`;
-    mensajePedido += `Agradezco la confirmación y los próximos pasos.\\n`;
-
-    const encodedMensaje = encodeURIComponent(mensajePedido);
-    const whatsappURL = `https://api.whatsapp.com/send?phone=${TU_NUMERO_WHATSAPP}&text=${encodedMensaje}`;
-
-    window.open(whatsappURL, '_blank');
-
-    alert("Serás redirigido a WhatsApp para enviar tu pedido. Una vez enviado, tu carrito se vaciará.");
-
-    shoppingCart = [];
-    saveCart(shoppingCart);
-
-    cerrarMediosPagoModal();
-    if (activeCartModal) { // Aunque ya debería estar cerrado por abrirMediosPagoModal
-        cerrarCarritoModal();
-    }
-    // updateCartIconCount();
-}
-
 // Handler para el botón de checkout del carrito
 function handleCheckout() {
     if(shoppingCart.length === 0){
         alert("Tu carrito está vacío.");
         return;
     }
-    // console.log("Cerrando modal del carrito antes de abrir medios de pago...");
-    // cerrarCarritoModal(); // Se llamará dentro de abrirMediosPagoModal
     abrirMediosPagoModal();
 }
 // --- Fin Lógica para Modal de Medios de Pago ---
