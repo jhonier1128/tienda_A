@@ -732,13 +732,14 @@ hr {
     /* margin: 10% auto; QUITADO - El centrado ahora es por Flexbox en .modal */
     padding: 25px;
     border: 1px solid #888;
-    width: 80%;
-    max-width: 500px; /* O un valor más adecuado si es necesario */
+    width: 50vw;     /* 50% del ancho del viewport */
+    max-width: 600px;  /* Límite superior para pantallas muy anchas */
+    min-width: 300px;  /* Límite inferior para pantallas pequeñas */
     border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     position: relative;
-    max-height: 60vh; /* Límite de altura al 60% del viewport */
-    overflow-y: auto; /* Scroll interno si el contenido excede max-height */
+    /* max-height: 60vh; QUITADO */
+    overflow-y: auto; /* Scroll interno si el contenido vertical es más alto */
 }
 
 .close-button {
